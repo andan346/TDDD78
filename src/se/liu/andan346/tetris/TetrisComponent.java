@@ -14,15 +14,21 @@ public class TetrisComponent extends JComponent
     }
 
     private Point getStartPos() {
+	// Get window size
 	Dimension size = getSize();
-	int newWidth = (size.width - board.getWidth() * SQUARE_SIZE) / 2;
-	int newHeight = (size.height - board.getHeight() * SQUARE_SIZE) / 2;
-	return new Point(newWidth, newHeight);
+	// Calculate coordinates for centering the board within the component
+	int x = (size.width - board.getWidth() * SQUARE_SIZE) / 2;
+	int y = (size.height - board.getHeight() * SQUARE_SIZE) / 2;
+
+	return new Point(x, y);
     }
 
     @Override
     public Dimension getPreferredSize() {
-	return new Dimension(board.getWidth() * SQUARE_SIZE, board.getHeight() * SQUARE_SIZE);
+	return new Dimension(
+		board.getWidth() * SQUARE_SIZE,
+		board.getHeight() * SQUARE_SIZE
+	);
     }
 
     @Override
@@ -30,54 +36,69 @@ public class TetrisComponent extends JComponent
 	super.paintComponent(g);
 	final Graphics2D g2d = (Graphics2D) g;
 
+	// Iterate over the board
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
+		// Get square type
 		SquareType type = board.getAt(x, y);
+
+		// Set pixel coordinates for drawing
+		Point startPos = getStartPos();
+		int drawX = startPos.x + x * SQUARE_SIZE;
+		int drawY = startPos.y + y * SQUARE_SIZE;
+
+		// If square empty, skip the rest of the iteration
 		if (type.equals(SquareType.EMPTY)) continue;
+
+		// Draw current square
 		g2d.setColor(type.getColor());
-		drawSquare(
-			getStartPos().x + x * SQUARE_SIZE,
-			getStartPos().y + y * SQUARE_SIZE,
-			g2d
-		);
+		drawSquare(drawX, drawY, g2d);
 	    }
 	}
     }
 
     private void drawSquare(int x, int y, Graphics2D g2d) {
-	/* Draw base shape */
+	// Draw base shape
 	g2d.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
 
-	/* Draw shading */
-	// Create shape
+	// Draw shading
+	drawShading(x, y, g2d);
+    }
+
+    private void drawShading(int x, int y, Graphics2D g2d) {
+	// Define the width of the shading
 	int width = (int) (0.15 * SQUARE_SIZE);
-	Shape shading = new Polygon(
+
+	// Create shape
+	Shape shape = new Polygon(
 		new int[]{x, x + SQUARE_SIZE, (x + SQUARE_SIZE) - width, x + width},
 		new int[]{y, y, y + width, y + width},
 		4
 	);
 
-	// Change color and rotation
+	// Definitions needed hereafter
 	Color color = g2d.getColor();
 	AffineTransform transform = new AffineTransform();
-	for (int i = 0; i < 4; i++) {
-	    // Rotation
-	    transform.rotate(
-		    Math.toRadians(90 * i),
-		    x + SQUARE_SIZE / 2.0,
-		    y + SQUARE_SIZE / 2.0
-	    );
-	    Shape shadingRotated = transform.createTransformedShape(shading);
 
-	    // Color
+	// For each side of the square...
+	for (int i = 0; i < 4; i++) {
+	    // Change the color of the shading
 	    switch (i) {
 		case 0 -> g2d.setColor(color.brighter());
 		case 1,2 -> g2d.setColor(color.darker());
 		case 3 -> g2d.setColor(color.darker().darker());
 	    }
 
+	    // Rotate the shape
+	    transform.rotate(
+		    Math.toRadians(90 * i),
+		    x + SQUARE_SIZE / 2.0,
+		    y + SQUARE_SIZE / 2.0
+	    );
+	    Shape rotated = transform.createTransformedShape(shape);
+
 	    // Draw
-	    g2d.fill(shadingRotated);
+	    g2d.fill(rotated);
 	}
     }
 }
