@@ -35,29 +35,29 @@ public class TetrisComponent extends JComponent
 		SquareType type = board.getAt(x, y);
 		if (type.equals(SquareType.EMPTY)) continue;
 		g2d.setColor(type.getColor());
-		drawSquare(x, y, g2d);
+		drawSquare(
+			getStartPos().x + x * SQUARE_SIZE,
+			getStartPos().y + y * SQUARE_SIZE,
+			g2d
+		);
 	    }
 	}
     }
 
     private void drawSquare(int x, int y, Graphics2D g2d) {
-	/* Offset coordinates */
-	x = getStartPos().x + x * SQUARE_SIZE;
-	y = getStartPos().y + y * SQUARE_SIZE;
-
 	/* Draw base shape */
 	g2d.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
 
 	/* Draw shading */
-	// Shape
+	// Create shape
 	int width = (int) (0.15 * SQUARE_SIZE);
-	Polygon shade = new Polygon(
+	Shape shading = new Polygon(
 		new int[]{x, x + SQUARE_SIZE, (x + SQUARE_SIZE) - width, x + width},
 		new int[]{y, y, y + width, y + width},
 		4
 	);
 
-	// Color and rotation
+	// Change color and rotation
 	Color color = g2d.getColor();
 	AffineTransform transform = new AffineTransform();
 	for (int i = 0; i < 4; i++) {
@@ -67,7 +67,7 @@ public class TetrisComponent extends JComponent
 		    x + SQUARE_SIZE / 2.0,
 		    y + SQUARE_SIZE / 2.0
 	    );
-	    Shape shadeRotated = transform.createTransformedShape(shade);
+	    Shape shadingRotated = transform.createTransformedShape(shading);
 
 	    // Color
 	    switch (i) {
@@ -77,7 +77,7 @@ public class TetrisComponent extends JComponent
 	    }
 
 	    // Draw
-	    g2d.fill(shadeRotated);
+	    g2d.fill(shadingRotated);
 	}
     }
 }
