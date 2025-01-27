@@ -14,10 +14,11 @@ public class TetrisViewer
 
     public void show() {
 	JFrame frame = new JFrame("Tetris");
+	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 	frame.setLayout(new BorderLayout());
 
 	tetrisComponent = new TetrisComponent(board);
-	tetrisComponent.setBackground(Color.darkGray);
 	frame.add(tetrisComponent);
 
 	frame.pack();
