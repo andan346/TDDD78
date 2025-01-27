@@ -4,23 +4,30 @@ import java.util.Random;
 
 public enum SquareType
 {
-    EMPTY("\u001B[38;5;235m⬚"),
-    I("\u001B[38;5;50m▣"),
-    O("\u001B[38;5;220m▦"),
-    T("\u001B[38;5;127m▩"),
-    S("\u001B[38;5;40m▨"),
-    Z("\u001B[38;5;196m▧"),
-    J("\u001B[38;5;204m▥"), // ██
-    L("\u001B[38;5;202m▤");
+    //\u001B[38;5;<code>m
+    EMPTY('⬚', 255), // 255 ⬚
+    I('▣', 50), // 50
+    O('▦', 220), // 220
+    T('▩', 127), // 127
+    S('▨', 40), // 40
+    Z('▧', 196), // 196
+    J('▥', 204), // ██ 204
+    L('▤', 202); // 202
 
-    private final String symbol;
+    private final char symbol;
+    private int color = 255;
 
-    SquareType(String symbol) {
+    SquareType(char symbol, int color) {
 	this.symbol = symbol;
+	this.color = color;
     }
 
     public String formatted() {
-	return this.symbol;
+	return String.format("\u001B[38;5;%dm%c", color, symbol);
+    }
+
+    public String asSymbol() {
+	return String.valueOf(symbol);
     }
 
     public static void main() {

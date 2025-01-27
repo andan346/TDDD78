@@ -6,31 +6,32 @@ import java.util.stream.Collectors;
 
 public class BoardToTextConverter
 {
-    private Poly fallingPoly;
-    private Point fallingPos;
 
     public String convertToText(Board board) {
-	this.fallingPoly = board.getFalling();
-	this.fallingPos = board.getFallingPos();
+	Poly fallingPoly = board.getFalling();
+	Point fallingPos = board.getFallingPos();
 
 	StringBuilder sb = new StringBuilder();
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
 		SquareType squareSet = board.getAt(x, y);
-		SquareType squareFalling = getFallingSquareAt(x, y);
-
+		SquareType squareFalling = SquareType.EMPTY;
+		if (fallingPoly != null)
+		    squareFalling = fallingPoly.getSquareAt(x - fallingPos.x, y - fallingPos.y);
+		SquareType squareFinal = (squareFalling == SquareType.EMPTY) ? squareSet : squareFalling;
+		//sb.append(squareFinal.formatted());
+		sb.append(squareFinal.asSymbol());
 	    }
+	    sb.append("\n");
 	}
-
+	return sb.toString();
+	/*
 	return Arrays.stream(board.getSquares())
 		.map(row -> Arrays.stream(row)
 			.map(SquareType::formatted)
 			.collect(Collectors.joining(" ")))
 		.collect(Collectors.joining("\n"));
-    }
-
-    private SquareType getFallingSquareAt(int x, int y) {
-	fallingPoly.getSquareAt()
+	 */
     }
 
     private boolean pointWithinPoly(int x, int y, Poly poly, Point polyPos) {

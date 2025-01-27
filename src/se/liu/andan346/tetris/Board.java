@@ -53,6 +53,15 @@ public class Board
 		.collect(Collectors.joining("\n"));
     }
 
+    public void setFalling(Poly poly, int x, int y) {
+	for (int i = 0; i < poly.getHeight(); i++) {
+	    for (int j = 0; j < poly.getWidth(); j++) {
+		try { squares[i+y][j+x-poly.getWidth()/2] = poly.getSquareAt(j, i); }
+		catch (ArrayIndexOutOfBoundsException _) {}
+	    }
+	}
+    }
+
     public void generateRandom() {
 	for (int i = 0; i < getSquares().length; i++) {
 	    for (int j = 0; j < getSquares()[i].length; j++) {
