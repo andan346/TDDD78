@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 public class GameLoop
 {
     private Point boardSize = new Point(10, 20);
-    private Board board = null;
+    private Board board = new Board(boardSize.x, boardSize.y);
+    private TetrisViewer viewer = new TetrisViewer(board);
+    private BoardToTextConverter textConverter = new BoardToTextConverter();
     private int stepDelay = 1000;
 
     public GameLoop(String[] args) {
@@ -18,18 +20,17 @@ public class GameLoop
     }
 
     public void init() {
-	board = new Board(boardSize.x, boardSize.y);
 	Timer timer = new Timer(stepDelay, performStep);
 	timer.setCoalesce(true);
 	timer.start();
-	TetrisViewer viewer = new TetrisViewer(board);
+
 	viewer.show();
     }
 
     final Action performStep = new AbstractAction() {
 	@Override public void actionPerformed(final ActionEvent e) {
-
 	    board.generateRandom();
+	    viewer.updateText(textConverter.convertToText(board));
 	}
     };
 }

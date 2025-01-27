@@ -1,43 +1,36 @@
 package se.liu.andan346.tetris;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class BoardToTextConverter
 {
-
     public String convertToText(Board board) {
+	// Get the current falling poly (if any) and its position
 	Poly fallingPoly = board.getFalling();
 	Point fallingPos = board.getFallingPos();
 
 	StringBuilder sb = new StringBuilder();
+	/* Iterate over the boards squares */
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
-		SquareType squareSet = board.getAt(x, y);
-		SquareType squareFalling = SquareType.EMPTY;
+		// Retrieve square att current position on the board
+		SquareType boardSquare = board.getAt(x, y);
+
+		// Determine the square type from the falling piece (if it overlaps this position)
+		SquareType fallingSquare = SquareType.EMPTY;
 		if (fallingPoly != null)
-		    squareFalling = fallingPoly.getSquareAt(x - fallingPos.x, y - fallingPos.y);
-		SquareType squareFinal = (squareFalling == SquareType.EMPTY) ? squareSet : squareFalling;
+		    fallingSquare = fallingPoly.getSquareAt(x - fallingPos.x, y - fallingPos.y);
+
+		// Use the falling piece's square unless it's empty; otherwise, use the board's square
+		SquareType resultingSquare = (fallingSquare == SquareType.EMPTY) ? boardSquare : fallingSquare;
+
+		// Append the symbol representation of the square to the StringBuilder
+		sb.append(resultingSquare.asSymbol());
 		//sb.append(squareFinal.formatted());
-		sb.append(squareFinal.asSymbol());
 	    }
-	    sb.append("\n");
+	    // Add a new line after each row
+	    sb.append(y < board.getHeight() - 1 ? "\n" : "");
 	}
 	return sb.toString();
-	/*
-	return Arrays.stream(board.getSquares())
-		.map(row -> Arrays.stream(row)
-			.map(SquareType::formatted)
-			.collect(Collectors.joining(" ")))
-		.collect(Collectors.joining("\n"));
-	 */
     }
-
-    private boolean pointWithinPoly(int x, int y, Poly poly, Point polyPos) {
-	int x1 = polyPos.x; 		int y1 = polyPos.y;
-	int x2 = x1 + poly.getWidth();	int y2 = y1 + poly.getHeight();
-	return (x1 <= x && x <= x2) && (y1 <= y && y <= y2);
-    }
-
 }
