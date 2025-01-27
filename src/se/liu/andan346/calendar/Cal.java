@@ -15,8 +15,8 @@ public class Cal
     public void show() {
 	List<Appointment> sortedAppointments = appointments.stream()
 		.sorted(Comparator.comparingInt((Appointment app) -> app.getDate().getYear())
-					    .thenComparingInt(app -> app.getDate().getDay())
 					    .thenComparingInt(app -> app.getDate().getMonth().getNumber())
+					    .thenComparingInt(app -> app.getDate().getDay())
 					    .thenComparingInt(app -> app.getTimeSpan().getStart().toMinutes())
 					    .thenComparing(Appointment::getSubject))
 		.toList();
