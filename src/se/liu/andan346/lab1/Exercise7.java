@@ -8,7 +8,8 @@ public class Exercise7
 	final int min = 10;
 	final int max = 20;
 
-	String input = JOptionPane.showInputDialog("\"for\" eller \"while\"");
+	String input = JOptionPane.showInputDialog("'for' or 'while'");
+
 	switch (input.toLowerCase()) {
 	    case "for":
 		System.out.println(sumFor(min, max));
@@ -17,7 +18,7 @@ public class Exercise7
 		System.out.println(sumWhile(min, max));
 		break;
 	    default:
-		throw new IllegalArgumentException("Invalid input: " + input + ". Expected 'for' or 'while'.");
+		System.out.println("Did not recognize \"" + input + "\". Please enter 'for' or 'while'.");
 	}
     }
 

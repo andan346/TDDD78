@@ -13,16 +13,15 @@ public class Exercise5
      * @param f
      * @return f!
      */
-    public static int factorial(int f) {
+    private static int factorial(int f) {
 	if (f == 0)
 	    return 1;
 
 	int result = 1;
 
-	for (int i = 1; i <= f; i++) {
+  	for (int i = 1; i <= f; i++) {
 	    result *= i;
 	}
-
-	return result;
+	  return result;
     }
 }

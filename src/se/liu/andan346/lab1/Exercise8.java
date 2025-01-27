@@ -6,9 +6,10 @@ public class Exercise8
 {
     public static void main(String[] args) {
 	boolean shouldQuit = false;
-	while (!shouldQuit) {
-	    if (askUser("Quit?") && askUser("Really?")) shouldQuit = true;
-	}
+	do {
+	    if (askUser("Quit?") && askUser("Really?"))
+		shouldQuit = true;
+	} while (!shouldQuit);
     }
 
     public static boolean askUser(String question) {
