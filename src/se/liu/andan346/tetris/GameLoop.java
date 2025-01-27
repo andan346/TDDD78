@@ -30,7 +30,8 @@ public class GameLoop
     final Action performStep = new AbstractAction() {
 	@Override public void actionPerformed(final ActionEvent e) {
 	    board.generateRandom();
-	    viewer.updateText(textConverter.convertToText(board));
+	    viewer.tetrisComponent.repaint();
+	    //viewer.updateText(textConverter.convertToText(board));
 	}
     };
 }
