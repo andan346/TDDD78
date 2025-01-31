@@ -2,29 +2,8 @@ package se.liu.andan346.lab3;
 
 import se.liu.andan346.lab1.Person;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-public class Queue
+public class Queue extends ListManipulator
 {
-    private List<Person> elements = new ArrayList<>();
-
-    public int size() {
-	return elements.size();
-    }
-
-    public boolean isEmpty() {
-	return elements.isEmpty();
-    }
-
-    public boolean contains(final Object o) {
-	return elements.contains(o);
-    }
-
-    public Iterator<Person> iterator() {
-	return elements.iterator();
-    }
 
     public boolean add(final Person person) {
 	return elements.add(person);
@@ -43,7 +22,7 @@ public class Queue
     }
 
     public Person dequeue() {
-	Person e = elements.get(0);
+	Person e = elements.getFirst();
 	elements.removeFirst();
 	return e;
     }
