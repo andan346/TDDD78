@@ -2,49 +2,33 @@ package se.liu.andan346.shapes;
 
 import java.awt.*;
 
-import static se.liu.andan346.shapes.Shape.DEFAULT_COLOR;
-
-public class Rectangle implements Shape
+public class Rectangle extends AbstractShape
 {
-    private int x;
-    private int y;
     private int width;
     private int height;
-    private Color color;
 
     public Rectangle(final int x, final int y, final int width, final int height, final Color color) {
-	this.x = x;
-	this.y = y;
+	super(x, y, color);
+	if (width < 0 || height < 0) throw new IllegalArgumentException("Negativa dimensioner!");
 	this.width = width;
 	this.height = height;
-	this.color = color;
     }
 
-    public Rectangle(final int x, final int y, final int width, final int height) {
-	this.x = x;
-	this.y = y;
-	this.width = width;
-	this.height = height;
-	this.color = DEFAULT_COLOR;
+    public int getWidth() {
+	return width;
+    }
+
+    public int getHeight() {
+	return height;
+    }
+
+    @Override public void draw(final Graphics g) {
+	//System.out.println("Ritar: " + this);
+	super.draw(g);
+	g.drawRect(getX(), getY(), getWidth(), getHeight());
     }
 
     @Override public String toString() {
-	return "Rectangle{" + "x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + ", color=" + color + '}';
-    }
-
-    @Override public int getX() {
-	return x;
-    }
-
-    @Override public int getY() {
-	return y;
-    }
-
-    @Override public Color getColor() {
-	return color;
-    }
-
-    @Override public void draw() {
-	System.out.println("Ritar: " + this);
+	return "Rectangle{" + "x=" + getX() + ", y=" + getY() + ", width=" + getWidth() + ", height=" + getHeight() + ", color=" + getColor() + '}';
     }
 }

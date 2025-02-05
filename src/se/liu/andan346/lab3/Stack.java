@@ -4,7 +4,6 @@ import se.liu.andan346.lab1.Person;
 
 public class Stack extends ListManipulator
 {
-
     public void push(Person e) {
 	elements.add(e);
     }
