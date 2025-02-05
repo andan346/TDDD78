@@ -55,6 +55,12 @@ public class TetrisComponent extends JComponent
 		drawSquare(drawX, drawY, g2d);
 	    }
 	}
+
+	// Draw border
+	Point borderPos = getStartPos();
+	Dimension borderDim = getPreferredSize();
+	g2d.setColor(Color.BLACK);
+	g2d.drawRect(borderPos.x - 1, borderPos.y - 1, borderDim.width + 1, borderDim.height + 1);
     }
 
     private void drawSquare(int x, int y, Graphics2D g2d) {
