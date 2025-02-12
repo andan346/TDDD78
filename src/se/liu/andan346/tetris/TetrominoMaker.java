@@ -1,7 +1,11 @@
 package se.liu.andan346.tetris;
 
+import java.util.Random;
+
 public class TetrominoMaker
 {
+    private final static Random RND = new Random();
+
     public int getNumberOfTypes() {
 	return SquareType.values().length;
     }
@@ -23,10 +27,10 @@ public class TetrominoMaker
 	// Sets the pattern to one of the predefined types if existing
 	switch (type) {
 	    case SquareType.I -> pattern = new String[]{
-		    " # ",
-		    " # ",
-		    " # ",
-		    " # ",
+		    "#",
+		    "#",
+		    "#",
+		    "#",
 	    };
 	    case SquareType.O -> pattern = new String[]{
 		    "##",
@@ -47,18 +51,22 @@ public class TetrominoMaker
 		    " ##",
 	    };
 	    case SquareType.J -> pattern = new String[]{
-		    " # ",
-		    " # ",
-		    "## ",
+		    " #",
+		    " #",
+		    "##",
 	    };
 	    case SquareType.L -> pattern = new String[]{
-		    " # ",
-		    " # ",
-		    " ##",
+		    "# ",
+		    "# ",
+		    "##",
 	    };
 	}
 	// Return new Poly from pattern
 	// (Defaults to a 1x1 Poly with its only square being SquareType.EMPTY)
 	return Poly.fromPattern(pattern, type);
+    }
+
+    public Poly getRandom() {
+	return getPoly(1 + RND.nextInt(getNumberOfTypes() - 1));
     }
 }

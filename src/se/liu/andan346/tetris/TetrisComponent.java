@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-public class TetrisComponent extends JComponent
+public class TetrisComponent extends JComponent implements BoardListener
 {
     private Board board;
     private final static int SQUARE_SIZE = 30;
@@ -106,5 +106,9 @@ public class TetrisComponent extends JComponent
 	    // Draw
 	    g2d.fill(rotated);
 	}
+    }
+
+    @Override public void boardChanged() {
+	repaint();
     }
 }

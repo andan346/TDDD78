@@ -6,7 +6,7 @@ public class TetrisViewerTester
 	Board board = new Board(9, 18);
 	//board.generateRandom();
 	TetrominoMaker factory = new TetrominoMaker();
-	board.setFalling(factory.getPoly(SquareType.Z), 1, 0);
+	board.setFalling(factory.getPoly(SquareType.Z), 7, 0);
 	TetrisViewer viewer = new TetrisViewer(board);
 	viewer.show();
     }

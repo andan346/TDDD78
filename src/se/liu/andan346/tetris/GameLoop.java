@@ -29,8 +29,10 @@ public class GameLoop
 
     public final Action performStep = new AbstractAction() {
 	@Override public void actionPerformed(final ActionEvent e) {
-	    board.generateRandom();
-	    viewer.tetrisComponent.repaint();
+	    //board.generateRandom();
+	    board.addBoardListener(viewer.tetrisComponent);
+	    board.tick();
+	    //viewer.tetrisComponent.repaint();
 	    //viewer.updateText(textConverter.convertToText(board));
 	}
     };

@@ -1,6 +1,7 @@
 package se.liu.andan346.tetris;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -14,6 +15,10 @@ public class Board
 
     private Poly falling = null;
     private Point fallingPos = new Point();
+
+    private ArrayList<BoardListener> listeners = new ArrayList<>();
+
+    private TetrominoMaker tetrominoFactory = new TetrominoMaker();
 
     public Board(final int width, final int height) {
 	this.width = width;
@@ -46,18 +51,49 @@ public class Board
 	return fallingPos;
     }
 
+    public void setFallingPos(Point p) {
+	fallingPos = p;
+    }
+
+    public void addBoardListener(BoardListener bl) {
+	this.listeners.add(bl);
+    }
+
+    private void notifyListeners() {
+	for (BoardListener listener : listeners) {
+	    listener.boardChanged();
+	}
+    }
+
+    public void tick() {
+	// Set new random falling poly if there currently is none
+	if (getFalling() == null) {
+	    Poly poly = tetrominoFactory.getRandom();
+	    setFalling(poly, this.getWidth()/2 - poly.getWidth()/2, 0);
+	// Else, move falling one position down
+	} else {
+	    moveFalling(0, 1);
+	}
+    }
+
+    private void moveFalling(final int x, final int y) {
+	setFallingPos(new Point(fallingPos.x + x, fallingPos.y + y));
+	notifyListeners();
+    }
+
     public void setFalling(Poly poly, int x, int y) {
+	// Clamp coordinates to keep them within the board
+	x = Math.clamp(x, 0, this.getWidth() - poly.getWidth());
+	y = Math.clamp(y, 0, this.getHeight() - poly.getHeight());
 	/* Iterate over the Poly's squares */
 	for (int i = 0; i < poly.getHeight(); i++) {
 	    for (int j = 0; j < poly.getWidth(); j++) {
 		// Fill the squares at the specified coordinates (centered on the Poly's own x axis)
-		try { squares[i+y][j+x-poly.getWidth()/2] = poly.getSquareAt(j, i); }
-		// We don't need to worry about squares outside the board so we just ignore any index errors
-		catch (ArrayIndexOutOfBoundsException e) {
-		    System.out.println("Issue that will be fixed in a future commit. For lab 1-3 this is not an issue.");
-		}
+		squares[i+y][j+x] = poly.getSquareAt(j, i);
 	    }
 	}
+	falling = poly;
+	notifyListeners();
     }
 
     public void generateRandom() {
@@ -69,5 +105,6 @@ public class Board
 		squares[i][j] = SquareType.values()[rnd];
 	    }
 	}
+	notifyListeners();
     }
 }
