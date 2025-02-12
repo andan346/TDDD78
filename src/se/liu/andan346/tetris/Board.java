@@ -53,7 +53,9 @@ public class Board
 		// Fill the squares at the specified coordinates (centered on the Poly's own x axis)
 		try { squares[i+y][j+x-poly.getWidth()/2] = poly.getSquareAt(j, i); }
 		// We don't need to worry about squares outside the board so we just ignore any index errors
-		catch (ArrayIndexOutOfBoundsException _) {}
+		catch (ArrayIndexOutOfBoundsException e) {
+		    System.out.println("Issue that will be fixed in a future commit. For lab 1-3 this is not an issue.");
+		}
 	    }
 	}
     }

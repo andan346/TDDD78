@@ -34,7 +34,7 @@ public class Month
 	return MONTH_NAME_TO_LENGTH.getOrDefault(name, -1);
     }
 
-    final static Map<String, Integer> MONTH_NAME_TO_LENGTH = Map.ofEntries(
+    private final static Map<String, Integer> MONTH_NAME_TO_LENGTH = Map.ofEntries(
 	    Map.entry("january", 31),
 	    Map.entry("february", 28),
 	    Map.entry("march", 31),
@@ -49,7 +49,7 @@ public class Month
 	    Map.entry("december", 31)
     );
 
-    final static Map<String, Integer> MONTH_NAME_TO_NUMBER = Map.ofEntries(
+    private final static Map<String, Integer> MONTH_NAME_TO_NUMBER = Map.ofEntries(
 	    Map.entry("january", 1),
 	    Map.entry("february", 2),
 	    Map.entry("march", 3),
