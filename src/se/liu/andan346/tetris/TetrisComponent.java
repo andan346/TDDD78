@@ -2,7 +2,10 @@ package se.liu.andan346.tetris;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeListener;
 
 public class TetrisComponent extends JComponent implements BoardListener
 {
@@ -11,6 +14,32 @@ public class TetrisComponent extends JComponent implements BoardListener
 
     public TetrisComponent(Board board) {
 	this.board = board;
+	addKeyBindings();
+    }
+
+    private void addKeyBindings() {
+	this.getInputMap().put(
+		KeyStroke.getKeyStroke(
+			KeyEvent.VK_LEFT, 0, false
+		), "move_left");
+	this.getInputMap().put(
+		KeyStroke.getKeyStroke(
+			KeyEvent.VK_RIGHT, 0, false
+		), "move_right");
+
+	this.getActionMap().put("move_left", new AbstractAction()
+	{
+	    @Override public void actionPerformed(final ActionEvent e) {
+		board.moveFalling(Direction.LEFT);
+	    }
+	});
+
+	this.getActionMap().put("move_right", new AbstractAction()
+	{
+	    @Override public void actionPerformed(final ActionEvent e) {
+		board.moveFalling(Direction.RIGHT);
+	    }
+	});
     }
 
     private Point getStartPos() {

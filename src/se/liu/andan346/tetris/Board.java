@@ -13,7 +13,7 @@ public class Board
     private int height;
     private SquareType[][] squares;
 
-    private Poly falling = null;
+    private Poly fallingPoly = null;
     private Point fallingPos = new Point();
 
     private ArrayList<BoardListener> listeners = new ArrayList<>();
@@ -44,7 +44,7 @@ public class Board
     }
 
     public Poly getFalling() {
-	return falling;
+	return fallingPoly;
     }
 
     public Point getFallingPos() {
@@ -66,6 +66,8 @@ public class Board
     }
 
     public void tick() {
+	System.out.println("tick");
+
 	// Set new random falling poly if there currently is none
 	if (getFalling() == null) {
 	    Poly poly = tetrominoFactory.getRandom();
@@ -76,24 +78,67 @@ public class Board
 	}
     }
 
+    public void moveFalling(Direction dir) {
+	switch (dir) {
+	    case LEFT -> moveFalling(-1, 0);
+	    case RIGHT -> moveFalling(1, 0);
+	}
+    }
+
     private void moveFalling(final int x, final int y) {
+	clearFallingSquares();
 	setFallingPos(new Point(fallingPos.x + x, fallingPos.y + y));
-	notifyListeners();
+	clampFalling();
+	fillFallingSquares();
     }
 
     public void setFalling(Poly poly, int x, int y) {
-	// Clamp coordinates to keep them within the board
-	x = Math.clamp(x, 0, this.getWidth() - poly.getWidth());
-	y = Math.clamp(y, 0, this.getHeight() - poly.getHeight());
+	// Initiate new falling poly and pos
+	fallingPoly = poly;
+	fallingPos = new Point(x, y);
+
+	// Clamp poly to board and fill its squares
+	clampFalling();
+	fillFallingSquares();
+    }
+
+    private void clearFallingSquares() {
+	Poly poly = fallingPoly;
+	int x = fallingPos.x;
+	int y = fallingPos.y;
+
 	/* Iterate over the Poly's squares */
 	for (int i = 0; i < poly.getHeight(); i++) {
 	    for (int j = 0; j < poly.getWidth(); j++) {
-		// Fill the squares at the specified coordinates (centered on the Poly's own x axis)
+		// Fill the squares at the specified coordinates
+		squares[i+y][j+x] = SquareType.EMPTY;
+	    }
+	}
+	// Notify update
+	notifyListeners();
+    }
+
+    private void fillFallingSquares() {
+	Poly poly = fallingPoly;
+	int x = fallingPos.x;
+	int y = fallingPos.y;
+
+	/* Iterate over the Poly's squares */
+	for (int i = 0; i < poly.getHeight(); i++) {
+	    for (int j = 0; j < poly.getWidth(); j++) {
+		// Fill the squares at the specified coordinates
 		squares[i+y][j+x] = poly.getSquareAt(j, i);
 	    }
 	}
-	falling = poly;
+	// Notify update
 	notifyListeners();
+    }
+
+    private void clampFalling() {
+	this.fallingPos = new Point(
+	    Math.clamp(fallingPos.x, 0, this.getWidth() - fallingPoly.getWidth()),
+	    Math.clamp(fallingPos.y, 0, this.getHeight() - fallingPoly.getHeight())
+	);
     }
 
     public void generateRandom() {
