@@ -2,13 +2,13 @@ package se.liu.andan346.shapes;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.List;
 
 public class DiagramComponent extends JComponent
 {
-    private ArrayList<Shape> shapes;
+    private List<Shape> shapes;
 
-    public DiagramComponent(final ArrayList<Shape> shapes) {
+    public DiagramComponent(final List<Shape> shapes) {
 	this.shapes = shapes;
     }
 
