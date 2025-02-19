@@ -1,10 +1,8 @@
 package se.liu.andan346.tetris;
 
-import java.util.Random;
-
 public class BoardTester
 {
-    private static final BoardToTextConverter textConverter = new BoardToTextConverter();
+    private static final BoardToTextConverter CONVERTER = new BoardToTextConverter();
 
     public static void main(String[] args) {
 	Board board = new Board(7, 9);
@@ -12,6 +10,6 @@ public class BoardTester
 	TetrominoMaker factory = new TetrominoMaker();
 	board.setFalling(factory.getPoly(1), 3, 0);
 	board.setFalling(factory.getPoly(5), 5, 5);
-	System.out.println(textConverter.convertToText(board));
+	System.out.println(CONVERTER.convertToText(board));
     }
 }

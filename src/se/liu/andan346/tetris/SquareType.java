@@ -30,7 +30,7 @@ public enum SquareType
 	return Color.decode("#" + hexColor);
     }
 
-    public static void main() {
+    public static void main(String[] args) {
 	Random rnd = new Random();
 	for (int i = 0; i < 25; i++) {
 	    int rndIndex = rnd.nextInt(SquareType.values().length);

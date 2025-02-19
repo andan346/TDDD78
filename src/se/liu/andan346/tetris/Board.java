@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.List;
 
 public class Board
 {
@@ -16,7 +17,7 @@ public class Board
     private Poly fallingPoly = null;
     private Point fallingPos = new Point();
 
-    private ArrayList<BoardListener> listeners = new ArrayList<>();
+    private List<BoardListener> listeners = new ArrayList<>();
 
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
 
