@@ -1,5 +1,7 @@
 package se.liu.andan346.tetris;
 
+import java.awt.*;
+
 public class Poly
 {
     private SquareType[][] shape;

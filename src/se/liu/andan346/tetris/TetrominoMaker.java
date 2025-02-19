@@ -12,7 +12,7 @@ public class TetrominoMaker
 
     public Poly getPoly(int n) {
 	// Only accept index of existing SquareTypes
-	if (!(0 <= n && n <= getNumberOfTypes()))
+	if (!(1 <= n && n <= getNumberOfTypes()))
 	    throw new IllegalArgumentException("Invalid index: " + n);
 
 	// Convert index to enum value and get its Poly

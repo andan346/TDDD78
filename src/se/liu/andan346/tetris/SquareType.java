@@ -5,6 +5,7 @@ import java.util.Random;
 
 public enum SquareType
 {
+    OUTSIDE(' ', "000000"),
     EMPTY('⬚', "cccccc"),
     I('▣', "6af2f2"),
     O('▦', "f0f130"),
@@ -33,7 +34,7 @@ public enum SquareType
     public static void main() {
 	Random rnd = new Random();
 	for (int i = 0; i < 25; i++) {
-	    int rndIndex = rnd.nextInt(SquareType.values().length);
+	    int rndIndex = 1 + rnd.nextInt(SquareType.values().length - 1);
 	    SquareType rndSquareType = SquareType.values()[rndIndex];
 	    System.out.println(rndSquareType);
 	}

@@ -40,7 +40,10 @@ public class Board
     }
 
     public SquareType getAt(int x, int y) {
-	return squares[y][x];
+	if ((0 <= x && x < getWidth()) && (0 <= y && y < getHeight()))
+	    return squares[y][x];
+	else
+	    return SquareType.OUTSIDE;
     }
 
     public Poly getFalling() {
@@ -86,10 +89,37 @@ public class Board
     }
 
     private void moveFalling(final int x, final int y) {
+	Point newPos = new Point(fallingPos.x + x, fallingPos.y + y);
+	//if (!canMoveTo(newPos.x, newPos.y)) return;
+
 	clearFallingSquares();
-	setFallingPos(new Point(fallingPos.x + x, fallingPos.y + y));
+	setFallingPos(newPos);
 	clampFalling();
 	fillFallingSquares();
+    }
+
+    private boolean canMoveTo(final int x, final int y) {
+	Poly poly = fallingPoly;
+	Point[] corners = new Point[]{
+		new Point(x, y),
+		new Point(x + fallingPoly.getWidth(), y),
+		new Point(x + fallingPoly.getWidth(), y + fallingPoly.getHeight()),
+		new Point(x, y + fallingPoly.getHeight())
+	};
+
+	for (Point corner : corners) {
+	    System.out.println(getAt(corner.x, corner.y));
+
+	    // Implement "if corner on fallingpoly"
+	    if (false)
+		continue;
+
+	    if (!getAt(corner.x, corner.y).equals(SquareType.EMPTY))
+		return false;
+	}
+	System.out.println("---");
+
+	return true;
     }
 
     public void setFalling(Poly poly, int x, int y) {
@@ -146,7 +176,7 @@ public class Board
 	for (int i = 0; i < getSquares().length; i++) {
 	    for (int j = 0; j < getSquares()[i].length; j++) {
 		// Set current square to random SquareType
-		int rnd = RND.nextInt(SquareType.values().length);
+		int rnd = 1 + RND.nextInt(SquareType.values().length - 1);
 		squares[i][j] = SquareType.values()[rnd];
 	    }
 	}
