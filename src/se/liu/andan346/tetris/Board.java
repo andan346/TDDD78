@@ -69,13 +69,17 @@ public class Board
 	}
     }
 
+    private void spawnRandomFalling() {
+	Poly poly = tetrominoFactory.getRandom();
+	setFalling(poly, this.getWidth()/2 - poly.getWidth()/2, 0);
+    }
+
     public void tick() {
 	System.out.println("tick");
 
 	// Set new random falling poly if there currently is none
 	if (getFalling() == null) {
-	    Poly poly = tetrominoFactory.getRandom();
-	    setFalling(poly, this.getWidth()/2 - poly.getWidth()/2, 0);
+	    spawnRandomFalling();
 	// Else, move falling one position down
 	} else {
 	    moveFalling(0, 1);
@@ -89,17 +93,42 @@ public class Board
 	}
     }
 
-    private void moveFalling(final int x, final int y) {
-	Point newPos = new Point(fallingPos.x + x, fallingPos.y + y);
-	//if (!canMoveTo(newPos.x, newPos.y)) return;
+    private void moveFalling(final int dx, final int dy) {
+	Point oldPos = new Point(fallingPos);
+	Point newPos = new Point(oldPos.x + dx, oldPos.y + dy);
 
-	clearFallingSquares();
+	if (!canMoveTo(fallingPos.x + dx, fallingPos.y + dy)) {
+	    if (dy != 0)
+		spawnRandomFalling();
+	    return;
+	}
+
+
+	//if (!canMoveTo(newPos.x, newPos.y)) return;
 	setFallingPos(newPos);
+	clearFallingSquares();
 	clampFalling();
 	fillFallingSquares();
     }
 
+    private boolean hasCollision() {
+	Poly poly = fallingPoly;
+	int x = fallingPos.x;
+	int y = fallingPos.y;
+
+	/* Iterate over the Poly's squares */
+	for (int i = 0; i < poly.getHeight(); i++) {
+	    for (int j = 0; j < poly.getWidth(); j++) {
+		if (poly.getSquareAt(j, i) != SquareType.EMPTY && this.getAt(y + j, x + i) != SquareType.EMPTY)
+		    return true;
+	    }
+	}
+
+	return false;
+    }
+
     private boolean canMoveTo(final int x, final int y) {
+	if (true) return true;
 	Poly poly = fallingPoly;
 	Point[] corners = new Point[]{
 		new Point(x, y),
