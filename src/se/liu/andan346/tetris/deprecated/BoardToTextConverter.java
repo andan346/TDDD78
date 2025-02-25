@@ -6,6 +6,7 @@ import se.liu.andan346.tetris.util.SquareType;
 
 import java.awt.*;
 
+@Deprecated
 public class BoardToTextConverter
 {
     public String convertToText(Board board) {

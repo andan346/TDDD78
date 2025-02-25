@@ -5,6 +5,7 @@ import se.liu.andan346.tetris.Board;
 import javax.swing.*;
 import java.awt.*;
 
+@Deprecated
 public class TetrisViewerOld
 {
     private Board board;

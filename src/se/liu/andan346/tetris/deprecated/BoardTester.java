@@ -3,6 +3,7 @@ package se.liu.andan346.tetris.deprecated;
 import se.liu.andan346.tetris.Board;
 import se.liu.andan346.tetris.poly.TetrominoMaker;
 
+@Deprecated
 public class BoardTester
 {
     private static final BoardToTextConverter CONVERTER = new BoardToTextConverter();
