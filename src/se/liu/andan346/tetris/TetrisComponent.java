@@ -1,37 +1,27 @@
 package se.liu.andan346.tetris;
 
+import se.liu.andan346.tetris.input.InputHandler;
+import se.liu.andan346.tetris.util.BoardListener;
+import se.liu.andan346.tetris.util.SquareType;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 
 public class TetrisComponent extends JComponent implements BoardListener
 {
     private Board board;
     private final static int SQUARE_SIZE = 30;
+    public InputHandler inputHandler;
 
     public TetrisComponent(Board board) {
 	this.board = board;
-	addKeyBindings();
+	this.inputHandler = new InputHandler(this);
     }
 
-    private void addKeyBindings() {
-	bindKey(KeyEvent.VK_LEFT, "move_left", Direction.LEFT);
-	bindKey(KeyEvent.VK_RIGHT, "move_right", Direction.RIGHT);
-	bindKey(KeyEvent.VK_DOWN, "move_down", Direction.DOWN);
+    public Board getBoard() {
+	return board;
     }
-
-    private void bindKey(int keyCode, String actionName, Direction dir) {
-	KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, 0, false);
-	getInputMap().put(keyStroke, actionName);
-	getActionMap().put(actionName, new AbstractAction() {
-	    @Override public void actionPerformed(ActionEvent e) {
-		board.moveFalling(dir);
-	    }
-	});
-    }
-
 
     private Point getStartPos() {
 	// Get window size
