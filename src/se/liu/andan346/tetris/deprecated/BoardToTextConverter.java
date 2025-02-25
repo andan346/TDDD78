@@ -1,4 +1,8 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.deprecated;
+
+import se.liu.andan346.tetris.Board;
+import se.liu.andan346.tetris.poly.Poly;
+import se.liu.andan346.tetris.util.SquareType;
 
 import java.awt.*;
 

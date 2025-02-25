@@ -1,4 +1,4 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.util;
 
 import java.awt.*;
 import java.util.Random;

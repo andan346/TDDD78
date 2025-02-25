@@ -1,4 +1,6 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.poly;
+
+import se.liu.andan346.tetris.util.SquareType;
 
 import java.util.Random;
 

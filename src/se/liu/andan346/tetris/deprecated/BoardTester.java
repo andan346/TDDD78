@@ -1,4 +1,7 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.deprecated;
+
+import se.liu.andan346.tetris.Board;
+import se.liu.andan346.tetris.poly.TetrominoMaker;
 
 public class BoardTester
 {

@@ -1,5 +1,11 @@
 package se.liu.andan346.tetris;
 
+import se.liu.andan346.tetris.poly.Poly;
+import se.liu.andan346.tetris.poly.TetrominoMaker;
+import se.liu.andan346.tetris.util.BoardListener;
+import se.liu.andan346.tetris.util.Direction;
+import se.liu.andan346.tetris.util.SquareType;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -204,5 +210,9 @@ public class Board
 
     private void gameOver() {
 	isGameOver = true;
+    }
+
+    public void rotateFalling() {
+	System.out.println("rotate");
     }
 }

@@ -1,4 +1,8 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.util;
+
+import se.liu.andan346.tetris.Board;
+import se.liu.andan346.tetris.TetrisViewer;
+import se.liu.andan346.tetris.poly.TetrominoMaker;
 
 public class TetrisViewerTester
 {

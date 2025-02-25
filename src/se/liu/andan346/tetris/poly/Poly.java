@@ -1,6 +1,6 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.poly;
 
-import java.awt.*;
+import se.liu.andan346.tetris.util.SquareType;
 
 public class Poly
 {
