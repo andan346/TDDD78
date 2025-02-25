@@ -11,12 +11,16 @@ public class TetrominoMaker
     }
 
     public Poly getPoly(int n) {
-	// Only accept index of existing SquareTypes
-	if (!(1 <= n && n <= getNumberOfTypes()))
+	// Check for valid index
+	if (0 > n || n > getNumberOfTypes())
 	    throw new IllegalArgumentException("Invalid index: " + n);
 
-	// Convert index to enum value and get its Poly
 	SquareType type = SquareType.values()[n];
+	// Check for valid type
+	if (type == SquareType.EMPTY || type == SquareType.OUTSIDE)
+	    throw new IllegalArgumentException("Invalid type: " + type);
+
+	// Return valid type
 	return getPoly(type);
     }
 
@@ -67,6 +71,8 @@ public class TetrominoMaker
     }
 
     public Poly getRandom() {
-	return getPoly(1 + RND.nextInt(getNumberOfTypes() - 1));
+	int lowerIndexBound = 2;
+	int higherIndexBound = getNumberOfTypes();
+	return getPoly(lowerIndexBound + RND.nextInt(higherIndexBound - lowerIndexBound));
     }
 }
