@@ -21,11 +21,8 @@ public class TetrisViewer
 	tetrisComponent = new TetrisComponent(board);
 	frame.add(tetrisComponent);
 
-	frame.pack();
+	frame.pack(); // Apply changes
+	frame.setLocationRelativeTo(null); // Center frame
 	frame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-	new TetrisViewer(new Board(9, 18)).show();
     }
 }
