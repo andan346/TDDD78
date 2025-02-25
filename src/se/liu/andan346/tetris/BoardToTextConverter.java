@@ -6,7 +6,7 @@ public class BoardToTextConverter
 {
     public String convertToText(Board board) {
 	// Get the current falling poly (if any) and its position
-	Poly fallingPoly = board.getFalling();
+	Poly fallingPoly = board.getFallingPoly();
 	Point fallingPos = board.getFallingPos();
 
 	StringBuilder sb = new StringBuilder();

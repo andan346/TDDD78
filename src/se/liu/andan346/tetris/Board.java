@@ -36,18 +36,26 @@ public class Board
 	return height;
     }
 
-    public SquareType[][] getSquares() {
-	return squares;
+    public boolean isWithinBoard(int x, int y) {
+	return (0 <= x && x < getWidth()) && (0 <= y && y < getHeight());
     }
 
     public SquareType getAt(int x, int y) {
-	if ((0 <= x && x < getWidth()) && (0 <= y && y < getHeight()))
+	if (isWithinBoard(x, y))
 	    return squares[y][x];
 	else
 	    return SquareType.OUTSIDE;
     }
 
-    public Poly getFalling() {
+    private boolean setAt(int x, int y, SquareType type) {
+	if (isWithinBoard(x, y)) {
+	    squares[y][x] = type;
+	    return true;
+	}
+	else return false;
+    }
+
+    public Poly getFallingPoly() {
 	return fallingPoly;
     }
 
@@ -75,82 +83,63 @@ public class Board
     }
 
     public void tick() {
-	System.out.println("tick");
+	System.out.println(fallingPos);
 
 	// Set new random falling poly if there currently is none
-	if (getFalling() == null) {
+	if (getFallingPoly() == null) {
 	    spawnRandomFalling();
 	// Else, move falling one position down
 	} else {
-	    moveFalling(0, 1);
+	    moveFalling(Direction.DOWN);
 	}
     }
 
     public void moveFalling(Direction dir) {
 	switch (dir) {
-	    case LEFT -> moveFalling(-1, 0);
-	    case RIGHT -> moveFalling(1, 0);
+	    case LEFT -> moveFallingPoly(-1, 0);
+	    case RIGHT -> moveFallingPoly(1, 0);
+	    case DOWN -> moveFallingPoly(0, 1);
 	}
     }
 
-    private void moveFalling(final int dx, final int dy) {
+    private void moveFallingPoly(final int dx, final int dy) {
+	if (fallingPoly == null) return;
+
 	Point oldPos = new Point(fallingPos);
 	Point newPos = new Point(oldPos.x + dx, oldPos.y + dy);
+	List<Point> squarePositions = getFallingOccupiedSquares();
 
-	if (!canMoveTo(fallingPos.x + dx, fallingPos.y + dy)) {
-	    if (dy != 0)
-		spawnRandomFalling();
-	    return;
+	fallingPos = newPos;
+	if (hasCollision(squarePositions)) {
+	    fallingPos = oldPos;
+	    System.out.println("collision");
+	    if (dy > 0) fallingPoly = null;
 	}
-
-
-	//if (!canMoveTo(newPos.x, newPos.y)) return;
-	setFallingPos(newPos);
-	clearFallingSquares();
-	clampFalling();
-	fillFallingSquares();
+	else moveFallingSquares(squarePositions, dx, dy);
     }
 
-    private boolean hasCollision() {
-	Poly poly = fallingPoly;
-	int x = fallingPos.x;
-	int y = fallingPos.y;
-
-	/* Iterate over the Poly's squares */
-	for (int i = 0; i < poly.getHeight(); i++) {
-	    for (int j = 0; j < poly.getWidth(); j++) {
-		if (poly.getSquareAt(j, i) != SquareType.EMPTY && this.getAt(y + j, x + i) != SquareType.EMPTY)
-		    return true;
-	    }
+    private boolean hasCollision(List<Point> oldSquarePositions) {
+	for (Point squarePos : getFallingOccupiedSquares()) {
+	    if (oldSquarePositions.contains(squarePos))
+		continue;
+	    else if (this.getAt(squarePos.x, squarePos.y) != SquareType.EMPTY)
+		return true;
 	}
-
 	return false;
     }
 
-    private boolean canMoveTo(final int x, final int y) {
-	if (true) return true;
-	Poly poly = fallingPoly;
-	Point[] corners = new Point[]{
-		new Point(x, y),
-		new Point(x + fallingPoly.getWidth(), y),
-		new Point(x + fallingPoly.getWidth(), y + fallingPoly.getHeight()),
-		new Point(x, y + fallingPoly.getHeight())
-	};
-
-	for (Point corner : corners) {
-	    System.out.println(getAt(corner.x, corner.y));
-
-	    // Implement "if corner on fallingpoly"
-	    if (false)
-		continue;
-
-	    if (!getAt(corner.x, corner.y).equals(SquareType.EMPTY))
-		return false;
+    private void moveFallingSquares(List<Point> oldSquarePositions, int dx, int dy) {
+	for (Point squarePos : oldSquarePositions) {
+	    this.setAt(squarePos.x, squarePos.y, SquareType.EMPTY);
 	}
-	System.out.println("---");
-
-	return true;
+	for (Point squarePos : oldSquarePositions) {
+	    Point newPos = new Point(squarePos);
+	    newPos.translate(dx, dy);
+	    this.setAt(newPos.x, newPos.y, fallingPoly.getType());
+	}
+	notifyListeners();
     }
+
 
     public void setFalling(Poly poly, int x, int y) {
 	// Initiate new falling poly and pos
@@ -203,13 +192,24 @@ public class Board
 
     public void generateRandom() {
 	/* Iterate over the board */
-	for (int i = 0; i < getSquares().length; i++) {
-	    for (int j = 0; j < getSquares()[i].length; j++) {
+	for (int i = 0; i < getHeight(); i++) {
+	    for (int j = 0; j < getWidth(); j++) {
 		// Set current square to random SquareType
 		int rnd = 1 + RND.nextInt(SquareType.values().length - 1);
 		squares[i][j] = SquareType.values()[rnd];
 	    }
 	}
 	notifyListeners();
+    }
+
+    private List<Point> getFallingOccupiedSquares() {
+	List<Point> squarePositions = new ArrayList<>();
+	for (int i = 0; i < fallingPoly.getHeight(); i++) {
+	    for (int j = 0; j < fallingPoly.getWidth(); j++) {
+		if (fallingPoly.getSquareAt(j, i) != SquareType.EMPTY)
+		    squarePositions.add(new Point(fallingPos.x + j, fallingPos.y + i));
+	    }
+	}
+	return squarePositions;
     }
 }

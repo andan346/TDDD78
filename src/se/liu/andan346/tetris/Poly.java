@@ -5,17 +5,23 @@ import java.awt.*;
 public class Poly
 {
     private SquareType[][] shape;
+    private SquareType type;
 
-    public Poly(final SquareType[][] shape) {
+    public Poly(final SquareType[][] shape, final SquareType type) {
         this.shape = shape;
+        this.type = type;
     }
 
     public int getHeight() {
-        return  shape.length;
+        return shape.length;
     }
 
     public int getWidth() {
         return shape[0].length;
+    }
+
+    public SquareType getType() {
+        return this.type;
     }
 
     public SquareType getSquareAt(int x, int y) {
@@ -42,7 +48,6 @@ public class Poly
             }
         }
 
-        return new Poly(shape);
+        return new Poly(shape, type);
     }
-
 }

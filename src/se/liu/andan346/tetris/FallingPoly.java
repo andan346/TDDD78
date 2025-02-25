@@ -5,10 +5,12 @@ import java.awt.*;
 public class FallingPoly extends Poly
 {
     private Point position;
+    private SquareType type;
 
-    public FallingPoly(final SquareType[][] shape, final Point position) {
-	super(shape);
+    public FallingPoly(final Point position, final SquareType[][] shape, final SquareType type) {
+	super(shape, type);
 	this.position = position;
+	this.type = type;
     }
 
     public Point getPosition() {

@@ -18,29 +18,21 @@ public class TetrisComponent extends JComponent implements BoardListener
     }
 
     private void addKeyBindings() {
-	this.getInputMap().put(
-		KeyStroke.getKeyStroke(
-			KeyEvent.VK_LEFT, 0, false
-		), "move_left");
-	this.getInputMap().put(
-		KeyStroke.getKeyStroke(
-			KeyEvent.VK_RIGHT, 0, false
-		), "move_right");
+	bindKey(KeyEvent.VK_LEFT, "move_left", Direction.LEFT);
+	bindKey(KeyEvent.VK_RIGHT, "move_right", Direction.RIGHT);
+	bindKey(KeyEvent.VK_DOWN, "move_down", Direction.DOWN);
+    }
 
-	this.getActionMap().put("move_left", new AbstractAction()
-	{
-	    @Override public void actionPerformed(final ActionEvent e) {
-		board.moveFalling(Direction.LEFT);
-	    }
-	});
-
-	this.getActionMap().put("move_right", new AbstractAction()
-	{
-	    @Override public void actionPerformed(final ActionEvent e) {
-		board.moveFalling(Direction.RIGHT);
+    private void bindKey(int keyCode, String actionName, Direction dir) {
+	KeyStroke keyStroke = KeyStroke.getKeyStroke(keyCode, 0, false);
+	getInputMap().put(keyStroke, actionName);
+	getActionMap().put(actionName, new AbstractAction() {
+	    @Override public void actionPerformed(ActionEvent e) {
+		board.moveFalling(dir);
 	    }
 	});
     }
+
 
     private Point getStartPos() {
 	// Get window size
