@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
-import java.beans.PropertyChangeListener;
 
 public class TetrisComponent extends JComponent implements BoardListener
 {

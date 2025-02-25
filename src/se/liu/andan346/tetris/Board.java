@@ -21,6 +21,8 @@ public class Board
 
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
 
+    private boolean isGameOver = false;
+
     public Board(final int width, final int height) {
 	this.width = width;
 	this.height = height;
@@ -77,13 +79,12 @@ public class Board
 	}
     }
 
-    private void spawnRandomFalling() {
-	Poly poly = tetrominoFactory.getRandom();
-	setFalling(poly, this.getWidth()/2 - poly.getWidth()/2, 0);
-    }
-
     public void tick() {
-	System.out.println(fallingPos);
+	// Game over check
+	if (isGameOver) {
+	    System.out.println("Game Over!");
+	    return;
+	}
 
 	// Set new random falling poly if there currently is none
 	if (getFallingPoly() == null) {
@@ -92,6 +93,17 @@ public class Board
 	} else {
 	    moveFalling(Direction.DOWN);
 	}
+    }
+
+    private List<Point> getFallingOccupiedSquares() {
+	List<Point> squarePositions = new ArrayList<>();
+	for (int i = 0; i < fallingPoly.getHeight(); i++) {
+	    for (int j = 0; j < fallingPoly.getWidth(); j++) {
+		if (fallingPoly.getSquareAt(j, i) != SquareType.EMPTY)
+		    squarePositions.add(new Point(fallingPos.x + j, fallingPos.y + i));
+	    }
+	}
+	return squarePositions;
     }
 
     public void moveFalling(Direction dir) {
@@ -112,7 +124,7 @@ public class Board
 	fallingPos = newPos;
 	if (hasCollision(squarePositions)) {
 	    fallingPos = oldPos;
-	    System.out.println("collision");
+	    if (fallingPos.y == 0) gameOver();
 	    if (dy > 0) fallingPoly = null;
 	}
 	else moveFallingSquares(squarePositions, dx, dy);
@@ -140,6 +152,10 @@ public class Board
 	notifyListeners();
     }
 
+    private void spawnRandomFalling() {
+	Poly poly = tetrominoFactory.getRandom();
+	setFalling(poly, this.getWidth()/2 - poly.getWidth()/2, 0);
+    }
 
     public void setFalling(Poly poly, int x, int y) {
 	// Initiate new falling poly and pos
@@ -149,22 +165,6 @@ public class Board
 	// Clamp poly to board and fill its squares
 	clampFalling();
 	fillFallingSquares();
-    }
-
-    private void clearFallingSquares() {
-	Poly poly = fallingPoly;
-	int x = fallingPos.x;
-	int y = fallingPos.y;
-
-	/* Iterate over the Poly's squares */
-	for (int i = 0; i < poly.getHeight(); i++) {
-	    for (int j = 0; j < poly.getWidth(); j++) {
-		// Fill the squares at the specified coordinates
-		squares[i+y][j+x] = SquareType.EMPTY;
-	    }
-	}
-	// Notify update
-	notifyListeners();
     }
 
     private void fillFallingSquares() {
@@ -202,14 +202,7 @@ public class Board
 	notifyListeners();
     }
 
-    private List<Point> getFallingOccupiedSquares() {
-	List<Point> squarePositions = new ArrayList<>();
-	for (int i = 0; i < fallingPoly.getHeight(); i++) {
-	    for (int j = 0; j < fallingPoly.getWidth(); j++) {
-		if (fallingPoly.getSquareAt(j, i) != SquareType.EMPTY)
-		    squarePositions.add(new Point(fallingPos.x + j, fallingPos.y + i));
-	    }
-	}
-	return squarePositions;
+    private void gameOver() {
+	isGameOver = true;
     }
 }
