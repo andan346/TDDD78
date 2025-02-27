@@ -97,7 +97,7 @@ public class Board
 	    spawnRandomFalling();
 	// Else, move falling one position down
 	} else {
-	    moveFalling(Direction.DOWN);
+	    //moveFalling(Direction.DOWN);
 	}
     }
 
@@ -212,7 +212,31 @@ public class Board
 	isGameOver = true;
     }
 
-    public void rotateFalling() {
-	System.out.println("rotate");
+    public void rotateFallingPoly() {
+	List<Point> oldSquarePositions = getFallingOccupiedSquares();
+	fallingPoly.rotate(1);
+	if (hasCollision(oldSquarePositions))
+	    fallingPoly.rotate(3);
+	else
+	    rotateFallingSquares(oldSquarePositions);
+    }
+
+    private void rotateFallingSquares(List<Point> oldSquarePositions) {
+	for (Point squarePos : oldSquarePositions) {
+	    setAt(squarePos.x, squarePos.y, SquareType.EMPTY);
+	}
+
+	for (Point squarePos : getFallingOccupiedSquares()) {
+	    setAt(squarePos.x, squarePos.y, fallingPoly.getType());
+	}
+
+	/*
+	for (int i = 0; i < fallingPoly.getHeight(); i++) {
+	    for (int j = 0; j < fallingPoly.getWidth(); j++) {
+		setAt(fallingPos.x + j, fallingPos.y + i, fallingPoly.getType());
+	    }
+	}
+	 */
+	notifyListeners();
     }
 }

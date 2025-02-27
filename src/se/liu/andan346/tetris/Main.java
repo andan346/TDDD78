@@ -6,7 +6,7 @@ public class Main
     public static void main(String[] args) {
 	// Defaults
 	Board board = new Board(10, 20);
-	int stepDelay = 1000;
+	int stepDelay = 750;
 
 	// Handle arguments
 	switch (args.length) {

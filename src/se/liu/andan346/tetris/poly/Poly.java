@@ -35,6 +35,20 @@ public class Poly
         return square;
     }
 
+    public void rotate(int times) {
+        SquareType[][] newShape = new SquareType[getWidth()][getHeight()];
+
+        for (int t = 0; t < times; t++) {
+            for (int i = 0; i < getHeight(); i++) {
+                for (int j = 0; j < getWidth(); j++) {
+                    newShape[j][getHeight() - 1 - i] = shape[i][j];
+                }
+            }
+        }
+
+        shape = newShape;
+    }
+
     public static Poly fromPattern(String[] pattern, SquareType type) {
         int rows = pattern.length;
         int cols = pattern[0].length();
