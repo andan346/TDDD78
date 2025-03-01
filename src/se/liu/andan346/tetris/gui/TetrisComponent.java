@@ -1,5 +1,6 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.gui;
 
+import se.liu.andan346.tetris.Board;
 import se.liu.andan346.tetris.input.InputHandler;
 import se.liu.andan346.tetris.util.BoardListener;
 import se.liu.andan346.tetris.util.SquareType;

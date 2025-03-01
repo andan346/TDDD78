@@ -94,6 +94,7 @@ public class Board
 
 	// Set new random falling poly if there currently is none
 	if (getFallingPoly() == null) {
+	    // Clear rows
 	    List<Integer> rowsToClear = getRowsToClear();
 	    if (!rowsToClear.isEmpty())
 		clearRows(rowsToClear);
@@ -101,7 +102,7 @@ public class Board
 	    spawnRandomFalling();
 	// Else, move falling one position down
 	} else {
-	    //moveFalling(Direction.DOWN);
+	    moveFalling(Direction.DOWN);
 	}
     }
 

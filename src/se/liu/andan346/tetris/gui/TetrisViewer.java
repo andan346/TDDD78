@@ -1,4 +1,6 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.gui;
+
+import se.liu.andan346.tetris.Board;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +19,8 @@ public class TetrisViewer
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	frame.setLayout(new BorderLayout());
+
+	frame.setJMenuBar(new TetrisMenuBar());
 
 	tetrisComponent = new TetrisComponent(board);
 	frame.add(tetrisComponent);

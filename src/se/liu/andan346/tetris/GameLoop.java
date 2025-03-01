@@ -1,6 +1,7 @@
 package se.liu.andan346.tetris;
 
 import se.liu.andan346.tetris.deprecated.BoardToTextConverter;
+import se.liu.andan346.tetris.gui.TetrisViewer;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

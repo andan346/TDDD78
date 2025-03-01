@@ -2,7 +2,7 @@ package se.liu.andan346.tetris.input;
 
 import se.liu.andan346.tetris.Board;
 import se.liu.andan346.tetris.util.Direction;
-import se.liu.andan346.tetris.TetrisComponent;
+import se.liu.andan346.tetris.gui.TetrisComponent;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
