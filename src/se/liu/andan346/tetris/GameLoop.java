@@ -12,7 +12,6 @@ public class GameLoop
     private TetrisViewer viewer;
     private BoardToTextConverter textConverter = new BoardToTextConverter();
     private int stepDelay;
-    private Timer timer = null;
 
     public GameLoop(Board board, int stepDelay) {
 	this.board = board;
@@ -21,7 +20,7 @@ public class GameLoop
     }
 
     public void init() {
-	this.timer = new Timer(stepDelay, this::performStep);
+	Timer timer = new Timer(stepDelay, this::performStep);
 	timer.setCoalesce(true);
 	timer.start();
     }

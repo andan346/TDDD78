@@ -2,8 +2,6 @@ package se.liu.andan346.tetris.gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class TetrisSplashComponent extends JComponent
 {
@@ -22,15 +20,13 @@ public class TetrisSplashComponent extends JComponent
         final JRootPane rootPane = frame.getRootPane();
         final JComponent glassPane = (JComponent) rootPane.getGlassPane();
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override public void run() {
-                glassPane.setLayout(new BorderLayout());
-                glassPane.add(TetrisSplashComponent.this, BorderLayout.CENTER);
-                glassPane.setVisible(true);
-                glassPane.revalidate();
-                glassPane.repaint();
-            }
-        });
+        SwingUtilities.invokeLater(() -> {
+	    glassPane.setLayout(new BorderLayout());
+	    glassPane.add(this, BorderLayout.CENTER);
+	    glassPane.setVisible(true);
+	    glassPane.revalidate();
+	    glassPane.repaint();
+	});
 
         try {
             animate();
