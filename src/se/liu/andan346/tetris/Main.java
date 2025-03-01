@@ -1,6 +1,8 @@
 package se.liu.andan346.tetris;
 
 
+import se.liu.andan346.tetris.gui.TetrisViewer;
+
 public class Main
 {
     public static void main(String[] args) {
@@ -18,6 +20,9 @@ public class Main
 	}
 
 	GameLoop mainLoop = new GameLoop(board, stepDelay);
+	TetrisViewer viewer = mainLoop.getViewer();
+	viewer.initFrame();
+	viewer.showSplash();
 	mainLoop.init();
     }
 }

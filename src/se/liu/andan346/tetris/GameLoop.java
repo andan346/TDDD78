@@ -9,32 +9,32 @@ import java.awt.event.ActionEvent;
 public class GameLoop
 {
     private Board board;
-    private TetrisViewer viewer = null;
+    private TetrisViewer viewer;
     private BoardToTextConverter textConverter = new BoardToTextConverter();
     private int stepDelay;
+    private Timer timer = null;
 
     public GameLoop(Board board, int stepDelay) {
 	this.board = board;
 	this.stepDelay = stepDelay;
+	this.viewer = new TetrisViewer(board);
     }
 
     public void init() {
-	viewer = new TetrisViewer(board);
-
-	Timer timer = new Timer(stepDelay, performStep);
+	this.timer = new Timer(stepDelay, this::performStep);
 	timer.setCoalesce(true);
 	timer.start();
-
-	viewer.show();
     }
 
-    public final Action performStep = new AbstractAction() {
-	@Override public void actionPerformed(final ActionEvent e) {
-	    //board.generateRandom();
-	    board.addBoardListener(viewer.tetrisComponent);
-	    board.tick();
-	    //viewer.tetrisComponent.repaint();
-	    //viewer.updateText(textConverter.convertToText(board));
-	}
-    };
+    private void performStep(ActionEvent actionEvent) {
+	//board.generateRandom();
+	board.addBoardListener(viewer.tetrisComponent);
+	board.tick();
+	//viewer.tetrisComponent.repaint();
+	//viewer.updateText(textConverter.convertToText(board));
+    }
+
+    public TetrisViewer getViewer() {
+	return viewer;
+    }
 }

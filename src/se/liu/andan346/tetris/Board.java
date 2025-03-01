@@ -9,6 +9,7 @@ import se.liu.andan346.tetris.util.SquareType;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Random;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class Board
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
 
     private boolean isGameOver = false;
+    private int score = 0;
 
     public Board(final int width, final int height) {
 	this.width = width;
@@ -81,7 +83,7 @@ public class Board
 
     private void notifyListeners() {
 	for (BoardListener listener : listeners) {
-	    listener.boardChanged();
+	    listener.boardChanged(this);
 	}
     }
 
@@ -96,14 +98,30 @@ public class Board
 	if (getFallingPoly() == null) {
 	    // Clear rows
 	    List<Integer> rowsToClear = getRowsToClear();
-	    if (!rowsToClear.isEmpty())
+	    if (!rowsToClear.isEmpty()) {
+		awardScore(rowsToClear.size());
 		clearRows(rowsToClear);
+	    }
 
 	    spawnRandomFalling();
 	// Else, move falling one position down
 	} else {
 	    moveFalling(Direction.DOWN);
 	}
+    }
+
+    private void awardScore(final int amtOfRows) {
+	// amtofRows, score
+	Map<Integer, Integer> scoreMap = Map.of(
+		1, 100,
+		2, 300,
+		3, 500,
+		4, 800
+	);
+
+	score += scoreMap.getOrDefault(Math.min(amtOfRows, scoreMap.size()), 0);
+	System.out.println(score);
+	notifyListeners();
     }
 
     private void clearRows(List<Integer> rowsToClear) {
@@ -271,5 +289,9 @@ public class Board
 	}
 
 	notifyListeners();
+    }
+
+    public int getScore() {
+	return score;
     }
 }

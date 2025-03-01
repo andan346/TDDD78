@@ -1,6 +1,8 @@
 package se.liu.andan346.tetris.util;
 
+import se.liu.andan346.tetris.Board;
+
 public interface BoardListener
 {
-    public void boardChanged();
+    public void boardChanged(Board board);
 }

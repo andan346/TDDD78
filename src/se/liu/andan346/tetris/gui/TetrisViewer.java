@@ -9,18 +9,21 @@ public class TetrisViewer
 {
     private Board board;
     public TetrisComponent tetrisComponent = null;
+    private JFrame frame = null;
 
     public TetrisViewer(Board board) {
 	this.board = board;
     }
 
-    public void show() {
-	JFrame frame = new JFrame("Tetris");
+    public void initFrame() {
+	this.frame = new JFrame("Tetris");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	frame.setLayout(new BorderLayout());
 
-	frame.setJMenuBar(new TetrisMenuBar());
+	TetrisMenuBar menuBar = new TetrisMenuBar();
+	board.addBoardListener(menuBar);
+	frame.setJMenuBar(menuBar);
 
 	tetrisComponent = new TetrisComponent(board);
 	frame.add(tetrisComponent);
@@ -28,5 +31,12 @@ public class TetrisViewer
 	frame.pack(); // Apply changes
 	frame.setLocationRelativeTo(null); // Center frame
 	frame.setVisible(true);
+    }
+
+    public void showSplash() {
+	Dimension size = new Dimension(board.getWidth() * TetrisComponent.SQUARE_SIZE,
+				       board.getHeight() * TetrisComponent.SQUARE_SIZE);
+	TetrisSplashComponent splash = new TetrisSplashComponent(size, frame);
+	splash.show();
     }
 }

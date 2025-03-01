@@ -12,7 +12,7 @@ import java.awt.geom.AffineTransform;
 public class TetrisComponent extends JComponent implements BoardListener
 {
     private Board board;
-    private final static int SQUARE_SIZE = 30;
+    public final static int SQUARE_SIZE = 30;
     public InputHandler inputHandler;
 
     public TetrisComponent(Board board) {
@@ -119,7 +119,7 @@ public class TetrisComponent extends JComponent implements BoardListener
 	}
     }
 
-    @Override public void boardChanged() {
+    @Override public void boardChanged(Board board) {
 	repaint();
     }
 }
