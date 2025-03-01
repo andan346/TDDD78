@@ -94,11 +94,48 @@ public class Board
 
 	// Set new random falling poly if there currently is none
 	if (getFallingPoly() == null) {
+	    List<Integer> rowsToClear = getRowsToClear();
+	    if (!rowsToClear.isEmpty())
+		clearRows(rowsToClear);
+
 	    spawnRandomFalling();
 	// Else, move falling one position down
 	} else {
-	    moveFalling(Direction.DOWN);
+	    //moveFalling(Direction.DOWN);
 	}
+    }
+
+    private void clearRows(List<Integer> rowsToClear) {
+	// Clear rows
+	for (int row : rowsToClear) {
+	    for (int col = 0; col < getWidth(); col++) {
+		setAt(col, row, SquareType.EMPTY);
+	    }
+	}
+
+	// Collapse rows
+	int destRow = getHeight() - 1;
+	for (int row = getHeight() - 1; row >= 0 ; row--) {
+	    if (!rowsToClear.contains(row)) {
+		for (int col = 0; col < getWidth(); col++) {
+		    setAt(col, destRow, getAt(col, row));
+		}
+		destRow--;
+	    }
+	}
+    }
+
+    private List<Integer> getRowsToClear() {
+	List<Integer> rowsToClear = new ArrayList<>();
+	for (int i = 0; i < getHeight(); i++) {
+	    boolean shouldClear = true;
+	    for (int j = 0; j < getWidth(); j++) {
+		if (getAt(j, i) == SquareType.EMPTY)
+		    shouldClear = false;
+	    }
+	    if (shouldClear) rowsToClear.add(i);
+	}
+	return rowsToClear;
     }
 
     private List<Point> getFallingOccupiedSquares() {
@@ -130,8 +167,10 @@ public class Board
 	fallingPos = newPos;
 	if (hasCollision(squarePositions)) {
 	    fallingPos = oldPos;
-	    if (fallingPos.y == 0) gameOver();
-	    if (dy > 0) fallingPoly = null;
+	    if (dy > 0) {
+		if (fallingPos.y == 0) gameOver();
+		fallingPoly = null;
+	    }
 	}
 	else moveFallingSquares(squarePositions, dx, dy);
     }
@@ -212,7 +251,24 @@ public class Board
 	isGameOver = true;
     }
 
-    public void rotateFalling() {
-	System.out.println("rotate");
+    public void rotateFallingPoly() {
+	List<Point> oldSquarePositions = getFallingOccupiedSquares();
+	fallingPoly.rotate(1);
+	if (hasCollision(oldSquarePositions))
+	    fallingPoly.rotate(3);
+	else
+	    rotateFallingSquares(oldSquarePositions);
+    }
+
+    private void rotateFallingSquares(List<Point> oldSquarePositions) {
+	for (Point squarePos : oldSquarePositions) {
+	    setAt(squarePos.x, squarePos.y, SquareType.EMPTY);
+	}
+
+	for (Point squarePos : getFallingOccupiedSquares()) {
+	    setAt(squarePos.x, squarePos.y, fallingPoly.getType());
+	}
+
+	notifyListeners();
     }
 }
