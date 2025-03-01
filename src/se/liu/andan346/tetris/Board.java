@@ -28,7 +28,7 @@ public class Board
 
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
 
-    private boolean isGameOver = false;
+    public boolean isGameOver = false;
     private int score = 0;
 
     public Board(final int width, final int height) {
@@ -89,10 +89,7 @@ public class Board
 
     public void tick() {
 	// Game over check
-	if (isGameOver) {
-	    System.out.println("Game Over!");
-	    return;
-	}
+	if (isGameOver) return;
 
 	// Set new random falling poly if there currently is none
 	if (getFallingPoly() == null) {
@@ -268,6 +265,7 @@ public class Board
 
     private void gameOver() {
 	isGameOver = true;
+	notifyListeners();
     }
 
     public void rotateFallingPoly() {

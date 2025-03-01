@@ -2,6 +2,7 @@ package se.liu.andan346.tetris;
 
 
 import se.liu.andan346.tetris.gui.TetrisViewer;
+import se.liu.andan346.tetris.util.score.HighscoreList;
 
 public class Main
 {
@@ -19,10 +20,14 @@ public class Main
 	    	break;
 	}
 
+	HighscoreList highScoreList = new HighscoreList();
+
 	GameLoop mainLoop = new GameLoop(board, stepDelay);
+
 	TetrisViewer viewer = mainLoop.getViewer();
 	viewer.initFrame();
 	viewer.showSplash();
+
 	mainLoop.init();
     }
 }
