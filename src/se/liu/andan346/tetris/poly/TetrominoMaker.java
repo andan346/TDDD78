@@ -48,12 +48,10 @@ public class TetrominoMaker
 	    };
 	    case SquareType.S -> pattern = new String[]{
 		    " ##",
-		    " # ",
 		    "## ",
 	    };
 	    case SquareType.Z -> pattern = new String[]{
 		    "## ",
-		    " # ",
 		    " ##",
 	    };
 	    case SquareType.J -> pattern = new String[]{
