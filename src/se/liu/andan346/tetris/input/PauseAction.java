@@ -16,6 +16,6 @@ public class PauseAction extends AbstractAction
     }
 
     @Override public void actionPerformed(final ActionEvent e) {
-	board.isGamePaused = !board.isGamePaused;
+	board.togglePause();
     }
 }

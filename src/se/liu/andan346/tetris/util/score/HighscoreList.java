@@ -22,6 +22,7 @@ public class HighscoreList implements BoardListener
     private List<Highscore> highscores;
     private Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final String FILE_PATH = "highscores.json";
+    private static final String TMP_FILE_PATH = FILE_PATH + ".tmp";
 
     public HighscoreList() {
 	while (true) {
@@ -80,9 +81,18 @@ public class HighscoreList implements BoardListener
     }
 
     private void saveHighscoresToFile() throws IOException {
-	try (FileWriter writer = new FileWriter(FILE_PATH)) {
+	File tmpFile = new File(TMP_FILE_PATH);
+	try (FileWriter writer = new FileWriter(tmpFile)) {
 	    gson.toJson(highscores, writer);
 	}
+
+	File ogFile = new File(FILE_PATH);
+
+	if (ogFile.exists() && !ogFile.delete())
+	    throw new IOException("Kunde inte ta bort den gamla highscore-filen.");
+
+	if (!tmpFile.renameTo(ogFile))
+	    throw new IOException("Kunde inte byta namn på tmp-filen");
     }
 
     @Override public String toString() {

@@ -89,9 +89,6 @@ public class Board
     }
 
     public void tick() {
-	// Should the board still tick?
-	if (isGameOver || isGamePaused) return;
-
 	// Set new random falling poly if there currently is none
 	if (getFallingPoly() == null) {
 	    // Clear rows
@@ -292,5 +289,10 @@ public class Board
 
     public int getScore() {
 	return score;
+    }
+
+    public void togglePause() {
+	isGamePaused = !isGamePaused;
+	notifyListeners();
     }
 }
