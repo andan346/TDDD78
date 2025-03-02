@@ -12,18 +12,30 @@ public class GameLoop
     private Board board;
     private TetrisViewer viewer;
     private BoardToTextConverter textConverter = new BoardToTextConverter();
-    private int stepDelay;
     private HighscoreList highScoreList;
 
-    public GameLoop(Board board, int stepDelay) {
+    private Timer timer;
+    private int stepDelay;
+    private int minStepDelay;
+    private int timeBetweenSpeedIncrease;
+    private int speedIncreaseAmount;
+    private long lastDelayDecreaseTime;
+
+    public GameLoop(Board board, int initStepDelay, int minStepDelay, int timeBetweenSpeedIncrease, int speedIncreaseAmount) {
 	this.board = board;
-	this.stepDelay = stepDelay;
 	this.viewer = new TetrisViewer(board);
 	this.highScoreList = new HighscoreList();
+
+	this.stepDelay = initStepDelay;
+	this.minStepDelay = minStepDelay;
+	this.timeBetweenSpeedIncrease = timeBetweenSpeedIncrease;
+	this.speedIncreaseAmount = speedIncreaseAmount;
     }
 
     public void init() {
-	Timer timer = new Timer(stepDelay, this::performStep);
+	lastDelayDecreaseTime = System.currentTimeMillis();
+	System.out.println(stepDelay);
+	timer = new Timer(stepDelay, this::performStep);
 	timer.setCoalesce(true);
 	timer.start();
 
@@ -36,6 +48,15 @@ public class GameLoop
 	board.tick();
 	//viewer.tetrisComponent.repaint();
 	//viewer.updateText(textConverter.convertToText(board));
+
+	long elapsed = System.currentTimeMillis() - lastDelayDecreaseTime;
+	System.out.println(elapsed + " : " + stepDelay);
+	if (elapsed > timeBetweenSpeedIncrease) {
+	    lastDelayDecreaseTime = System.currentTimeMillis();
+	    stepDelay = Math.max(minStepDelay, stepDelay - speedIncreaseAmount);
+	    timer.setDelay(stepDelay);
+	}
+
     }
 
     public TetrisViewer getViewer() {

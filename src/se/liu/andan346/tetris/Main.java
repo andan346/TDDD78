@@ -9,12 +9,19 @@ public class Main
     public static void main(String[] args) {
 	// Defaults
 	Board board = new Board(10, 20);
-	int stepDelay = 750;
+	int initStepDelay = 750;
+	int minStepDelay = 250;
+	int timeBetweenSpeedIncrease = 30000;
+	int speedIncreaseAmount = 50;
 
 	// Handle arguments
 	switch (args.length) {
+	    case 6:
+		minStepDelay = Integer.parseInt(args[3]);
+		timeBetweenSpeedIncrease = Integer.parseInt(args[4]);
+		speedIncreaseAmount = Integer.parseInt(args[5]);
 	    case 3:
-		stepDelay = Integer.parseInt(args[2]);
+		initStepDelay = Integer.parseInt(args[2]);
 	    case 2:
 		board = new Board(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
 	    	break;
@@ -22,7 +29,7 @@ public class Main
 
 	HighscoreList highScoreList = new HighscoreList();
 
-	GameLoop mainLoop = new GameLoop(board, stepDelay);
+	GameLoop mainLoop = new GameLoop(board, initStepDelay, minStepDelay, timeBetweenSpeedIncrease, speedIncreaseAmount);
 
 	TetrisViewer viewer = mainLoop.getViewer();
 	viewer.initFrame();
