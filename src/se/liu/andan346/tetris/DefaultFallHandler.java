@@ -12,14 +12,20 @@ public class DefaultFallHandler implements FallHandler
 	FallingPoly falling = board.getFalling();
 	List<Point> prevFallingSquares = falling.getPrevState().getSolidSquares();
 
+	return falling.getSolidSquares().stream()
+		.filter(p -> !prevFallingSquares.contains(p) && p.y >= 0)
+		.anyMatch(p -> board.getSquareAt(p) != SquareType.EMPTY);
+
+	/*
 	for (Point p : falling.getSolidSquares()) {
 	    if (prevFallingSquares.contains(p) || p.y < 0)
 		continue;
 	    else if (board.getSquareAt(p) != SquareType.EMPTY) {
-		System.out.println("true");
 		return true;
 	    }
 	}
 	return false;
+
+	 */
     }
 }

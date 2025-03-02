@@ -35,13 +35,12 @@ public class GameLoop implements BoardListener
 
     public void init() {
 	lastDelayDecreaseTime = System.currentTimeMillis();
-	System.out.println(stepDelay);
 	timer = new Timer(stepDelay, this::performStep);
 	timer.setCoalesce(true);
 	timer.start();
 
-	board.addBoardListener(highScoreList);
 	board.addBoardListener(this);
+	board.addBoardListener(highScoreList);
     }
 
     public TetrisViewer getViewer() {
@@ -62,9 +61,13 @@ public class GameLoop implements BoardListener
     }
 
     @Override public void boardChanged(final Board board) {
-	if (board.isGamePaused || board.isGameOver)
+	if ((board.isGamePaused || board.isGameOver) && timer.isRunning())
 	    timer.stop();
 	else if (!timer.isRunning())
 	    timer.start();
+    }
+
+    @Override public void onGameOver(final Board board) {
+	timer.stop();
     }
 }

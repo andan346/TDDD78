@@ -122,4 +122,8 @@ public class TetrisComponent extends JComponent implements BoardListener
     @Override public void boardChanged(Board board) {
 	repaint();
     }
+
+    @Override public void onGameOver(final Board board) {
+	repaint();
+    }
 }

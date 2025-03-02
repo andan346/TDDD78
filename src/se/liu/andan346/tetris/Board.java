@@ -17,26 +17,36 @@ import java.util.function.Consumer;
 
 public class Board
 {
+    // Board representation
     private int width;
     private int height;
     private SquareType[][] squares;
     private FallingPoly falling = null;
 
+    // Helper components
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
     private FallHandler fallHandler = new DefaultFallHandler();
     private List<BoardListener> listeners = new ArrayList<>();
     private final static Random RND = new Random();
 
+    // Flags & score
     public boolean isGameOver = false;
     public boolean isGamePaused = false;
     private int score = 0;
 
+    // Constructor
     public Board(final int width, final int height) {
 	this.width = width;
 	this.height = height;
 	this.squares = new SquareType[height][width];
+	// Fill board with empty squares
 	for (SquareType[] row : squares) Arrays.fill(row, SquareType.EMPTY);
     }
+
+
+    //#####################//
+    //  GETTERS & SETTERS  //
+    //#####################//
 
     public int getWidth() {
 	return width;
@@ -81,6 +91,11 @@ public class Board
 	return setSquareAt(pos.x, pos.y, type);
     }
 
+
+    //####################//
+    //  HELPER FUNCTIONS  //
+    //####################//
+
     private boolean isWithinBoard(int x, int y) {
 	return (0 <= x && x < getWidth()) && (0 <= y && y < getHeight());
     }
@@ -93,7 +108,6 @@ public class Board
 	}
     }
 
-
     public void addBoardListener(BoardListener bl) {
 	this.listeners.add(bl);
     }
@@ -105,23 +119,32 @@ public class Board
     }
 
 
+    //#############//
+    //  GAME TICK  //
+    //#############//
+
     public void tick() {
-	// Set new random falling poly if there currently is none
+	// If no falling poly currently exists...
 	if (getFalling() == null) {
-	    // Clear rows
+
+	    // Clear potential rows
 	    List<Integer> rowsToClear = getRowsToClear();
 	    if (!rowsToClear.isEmpty()) {
 		awardScore(rowsToClear.size());
 		clearRows(rowsToClear);
 	    }
 
+	    // Spawn new falling
 	    spawnRandomFalling();
-	// Else, move falling one position down
-	} else {
-	    //moveFalling(Direction.DOWN);
-	}
+
+	// Else, move falling downwards
+	} else moveFalling(Direction.DOWN);
     }
 
+
+    //########################//
+    //  FALLING POLY CONTROL  //
+    //########################//
 
     public void moveFalling(Direction dir) {
 	switch (dir) {
@@ -144,10 +167,10 @@ public class Board
 	    // revert to previous state,
 	    falling = falling.getPrevState();
 
-	    // freeze and spawn new poly if moving down.
+	    // freeze falling poly in place.
 	    if (dy > 0) {
 		freezeFalling();
-		spawnRandomFalling();
+		tick(); // advance one tick to make gameplay smoother
 	    }
 	}
 
@@ -179,20 +202,17 @@ public class Board
 	FallingPoly currState = falling;
 	FallingPoly prevState = falling.getPrevState();
 
-	System.out.println(currState.getSolidSquares());
-	System.out.println(prevState.getSolidSquares());
+	prevState.iterSolidSquares(p -> this.setSquareAt(prevState.squareToBoard(p), SquareType.EMPTY));
 
-	prevState.iterSolidSquares(p -> {
-	    this.setSquareAt(prevState.squareToBoard(p), SquareType.EMPTY);
-	});
-
-	currState.iterSolidSquares(p -> {
-	    this.setSquareAt(currState.squareToBoard(p), currState.getType());
-	});
+	currState.iterSolidSquares(p -> this.setSquareAt(currState.squareToBoard(p), currState.getType()));
 
 	notifyListeners();
     }
 
+
+    //#################//
+    //  POLY SPAWNING  //
+    //#################//
 
     private void spawnRandomFalling() {
 	Poly poly = tetrominoFactory.getRandom();
@@ -213,14 +233,19 @@ public class Board
 	    Point posDown = new Point(falling.getPos().x, falling.getPos().y + 1);
 	    falling.setPos(posDown);
 	    // Check collision
-	    if (getFallHandler().hasCollision(this))
-		gameOver(); // Call game over if collision on spawn
+	    if (getFallHandler().hasCollision(this)) {
+		if (!isGameOver) gameOver(); // Call game over if collision on spawn
+	    }
 	    else
 		// Move the squares on the board
 		moveFallingSquares();
 	}
     }
 
+
+    //########################//
+    //  ROW CLEARING & SCORE  //
+    //########################//
 
     private List<Integer> getRowsToClear() {
 	List<Integer> rowsToClear = new ArrayList<>();
@@ -272,11 +297,13 @@ public class Board
 	);
 
 	score += scoreMap.getOrDefault(Math.min(amtOfRows, scoreMap.size()), 0);
-	System.out.println(score);
 	notifyListeners();
     }
 
 
+    //#################//
+    //  MISCELLANEOUS  //
+    //#################//
 
     public void generateRandom() {
 	this.iterate(pos -> {
@@ -288,13 +315,22 @@ public class Board
 
     private void gameOver() {
 	isGameOver = true;
-	notifyListeners();
+	freezeFalling();
+
+	for (BoardListener listener : listeners) {
+	    listener.onGameOver(this);
+	}
     }
 
     public void togglePause() {
 	isGamePaused = !isGamePaused;
 	notifyListeners();
     }
+
+
+    //##############//
+    //  DEPRECATED  //
+    //##############//
 
     @Deprecated public void setFalling(Poly poly, int x, int y) {
 	// Initiate new falling poly

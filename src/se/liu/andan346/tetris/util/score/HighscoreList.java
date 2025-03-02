@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 public class HighscoreList implements BoardListener
 {
-    private List<Highscore> highscores;
+    private List<Highscore> highscores = null;
     private Gson gson = new Gson().newBuilder().setPrettyPrinting().create();
     private static final String FILE_PATH = "highscores.json";
     private static final String TMP_FILE_PATH = FILE_PATH + ".tmp";
@@ -44,11 +44,6 @@ public class HighscoreList implements BoardListener
 
     public List<Highscore> getHighscores() {
 	return highscores;
-    }
-
-    @Override public void boardChanged(final Board board) {
-	if (board.isGameOver)
-	    askUser(board.getScore());
     }
 
     public void showHighscores() {
@@ -106,5 +101,13 @@ public class HighscoreList implements BoardListener
 		"Ett problem uppstod!",
 		JOptionPane.YES_NO_OPTION
 	);
+    }
+
+    @Override public void boardChanged(final Board board) {
+	// Do nothing
+    }
+
+    @Override public void onGameOver(final Board board) {
+	askUser(board.getScore());
     }
 }

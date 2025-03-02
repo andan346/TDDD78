@@ -81,4 +81,8 @@ public class TetrisMenuBar extends JMenuBar implements BoardListener
     @Override public void boardChanged(Board board) {
         scoreLabel.setText("Poäng: " + board.getScore());
     }
+
+    @Override public void onGameOver(final Board board) {
+        // Do nothing
+    }
 }

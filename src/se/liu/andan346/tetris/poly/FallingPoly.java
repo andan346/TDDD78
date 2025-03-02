@@ -87,7 +87,6 @@ public class FallingPoly extends Poly
     public void adjustForEmptySquares() {
 	for (Point p : getSquares()) {
 	    if (getSquareAt(p.x, p.y).isSolid()) {
-		System.out.println(p.y);
 		translate(0, -p.y);
 		return;
 	    }
