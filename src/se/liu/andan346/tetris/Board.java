@@ -29,6 +29,7 @@ public class Board
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
 
     public boolean isGameOver = false;
+    public boolean isGamePaused = false;
     private int score = 0;
 
     public Board(final int width, final int height) {
@@ -88,8 +89,8 @@ public class Board
     }
 
     public void tick() {
-	// Game over check
-	if (isGameOver) return;
+	// Should the board still tick?
+	if (isGameOver || isGamePaused) return;
 
 	// Set new random falling poly if there currently is none
 	if (getFallingPoly() == null) {
