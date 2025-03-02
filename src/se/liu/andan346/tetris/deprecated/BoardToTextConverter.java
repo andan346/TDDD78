@@ -1,30 +1,27 @@
 package se.liu.andan346.tetris.deprecated;
 
 import se.liu.andan346.tetris.Board;
-import se.liu.andan346.tetris.poly.Poly;
+import se.liu.andan346.tetris.poly.FallingPoly;
 import se.liu.andan346.tetris.util.SquareType;
-
-import java.awt.*;
 
 @Deprecated
 public class BoardToTextConverter
 {
     public String convertToText(Board board) {
 	// Get the current falling poly (if any) and its position
-	Poly fallingPoly = board.getFallingPoly();
-	Point fallingPos = board.getFallingPos();
+	FallingPoly falling = board.getFalling();
 
 	StringBuilder sb = new StringBuilder();
 	/* Iterate over the boards squares */
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
 		// Retrieve square att current position on the board
-		SquareType boardSquare = board.getAt(x, y);
+		SquareType boardSquare = board.getSquareAt(x, y);
 
 		// Determine the square type from the falling piece (if it overlaps this position)
 		SquareType fallingSquare = SquareType.EMPTY;
-		if (fallingPoly != null)
-		    fallingSquare = fallingPoly.getSquareAt(x - fallingPos.x, y - fallingPos.y);
+		if (falling != null)
+		    fallingSquare = falling.getSquareAt(x - falling.getPos().x, y - falling.getPos().y);
 
 		// Use the falling piece's square unless it's empty; otherwise, use the board's square
 		SquareType resultingSquare = (fallingSquare == SquareType.EMPTY) ? boardSquare : fallingSquare;

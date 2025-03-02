@@ -51,7 +51,7 @@ public class TetrisComponent extends JComponent implements BoardListener
 	for (int y = 0; y < board.getHeight(); y++) {
 	    for (int x = 0; x < board.getWidth(); x++) {
 		// Get square type
-		SquareType type = board.getAt(x, y);
+		SquareType type = board.getSquareAt(x, y);
 
 		// Set pixel coordinates for drawing
 		Point startPos = getStartPos();

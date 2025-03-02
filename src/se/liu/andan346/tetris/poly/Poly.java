@@ -2,6 +2,8 @@ package se.liu.andan346.tetris.poly;
 
 import se.liu.andan346.tetris.util.SquareType;
 
+import java.awt.*;
+
 public class Poly
 {
     private SquareType[][] shape;
@@ -22,6 +24,24 @@ public class Poly
 
     public SquareType getType() {
         return this.type;
+    }
+
+    public SquareType[][] getShape() {
+        return shape;
+    }
+
+    public int getSolidHeight() {
+        int height = 0;
+        outer:
+        for (int i = 0; i < getHeight(); i++) {
+            for (int j = 0; j < getWidth(); j++) {
+                if (getSquareAt(j, i) != SquareType.EMPTY) {
+                    height++;
+                    continue outer;
+                }
+            }
+        }
+        return height;
     }
 
     public SquareType getSquareAt(int x, int y) {

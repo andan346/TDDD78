@@ -14,6 +14,6 @@ public class RotateAction extends AbstractAction
     }
 
     @Override public void actionPerformed(final ActionEvent e) {
-	board.rotateFallingPoly();
+	board.rotateFalling();
     }
 }

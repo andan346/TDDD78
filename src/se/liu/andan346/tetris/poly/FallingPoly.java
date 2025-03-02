@@ -1,26 +1,96 @@
 package se.liu.andan346.tetris.poly;
 
-import se.liu.andan346.tetris.util.SquareType;
-
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
-@Deprecated
 public class FallingPoly extends Poly
 {
-    private Point position;
-    private SquareType type;
+    private Point pos;
+    private FallingPoly prevState = null;
 
-    public FallingPoly(final Point position, final SquareType[][] shape, final SquareType type) {
-	super(shape, type);
-	this.position = position;
-	this.type = type;
+    public FallingPoly(final Poly poly, final Point pos) {
+	super(poly.getShape(), poly.getType());
+	this.pos = pos;
+	//adjustForEmptySquares();
     }
 
-    public Point getPosition() {
-	return position;
+    public Point getPos() {
+	return pos;
     }
 
-    public void setPosition(final Point position) {
-	this.position = position;
+    public void setPos(final Point pos) {
+	saveState();
+	this.pos = pos;
     }
+
+    public void translate(int dx, int dy) {
+	Point pos = getPos();
+	pos.translate(dx, dy);
+	this.pos = pos;
+    }
+
+    public Point squareToBoard(Point squarePos) {
+	return new Point(squarePos.x + pos.x, squarePos.y + pos.y);
+    }
+
+    public void rotate() {
+	saveState();
+	rotate(1);
+    }
+
+    public FallingPoly getPrevState() {
+	return prevState;
+    }
+
+    private void saveState() {
+	prevState = new FallingPoly(this, this.pos);
+    }
+
+    private void iterSquares(Consumer<Point> consumer) {
+	for (int y = 0; y < getHeight(); y++) {
+	    for (int x = 0; x < getWidth(); x++) {
+		consumer.accept(new Point(x, y));
+	    }
+	}
+    }
+
+    private List<Point> getSquares() {
+	List<Point> list = new ArrayList<>();
+	iterSquares(list::add);
+	return list;
+    }
+
+    public void iterSolidSquares(Consumer<Point> consumer) {
+	iterSquares(p -> {
+	    if (getSquareAt(p.x, p.y).isSolid())
+		consumer.accept(p);
+	});
+    }
+
+    public List<Point> getSolidSquares() {
+	List<Point> list = new ArrayList<>();
+	iterSolidSquares(p -> list.add(squareToBoard(p)));
+	return list;
+    }
+
+    private void adjustForEmptySquares() {
+	for (Point p : getSquares()) {
+	    if (getSquareAt(p.x, p.y).isSolid()) {
+		System.out.println(p.y);
+		translate(0, -p.y);
+		return;
+	    }
+	}
+    }
+
+    /*public int getSolidHeight() {
+	int[] minMax = new int[]{0, 0};
+	iterSolidSquares(p -> {
+	    minMax[0] = Math.min(minMax[0], p.y);
+	    minMax[1] = Math.max(minMax[1], p.y);
+	});
+	return minMax[1] - minMax[0];
+    }*/
 }

@@ -51,6 +51,7 @@ public class GameLoop implements BoardListener
     private void performStep(ActionEvent actionEvent) {
 	board.addBoardListener(viewer.tetrisComponent);
 	board.tick();
+	//board.generateRandom();
 
 	long elapsed = System.currentTimeMillis() - lastDelayDecreaseTime;
 	if (elapsed > timeBetweenSpeedIncrease) {

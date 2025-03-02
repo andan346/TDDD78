@@ -1,7 +1,10 @@
 package se.liu.andan346.tetris.util;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public enum SquareType
 {
@@ -21,6 +24,18 @@ public enum SquareType
     SquareType(char symbol, String hexColor) {
 	this.symbol = symbol;
 	this.hexColor = hexColor;
+    }
+
+    public static List<SquareType> getValid() {
+	List<SquareType> nonValid = List.of(OUTSIDE);
+	return Arrays.stream(values())
+		.filter(e -> !nonValid.contains(e))
+		.collect(Collectors.toList());
+    }
+
+    public boolean isSolid() {
+	List<SquareType> nonSolid = List.of(EMPTY, OUTSIDE);
+	return !nonSolid.contains(this);
     }
 
     public String asSymbol() {

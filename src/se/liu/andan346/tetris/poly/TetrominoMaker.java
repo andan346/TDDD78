@@ -33,36 +33,39 @@ public class TetrominoMaker
 	// Sets the pattern to one of the predefined types if existing
 	switch (type) {
 	    case SquareType.I -> pattern = new String[]{
-		    "#",
-		    "#",
-		    "#",
-		    "#",
+		    " #  ",
+		    " #  ",
+		    " #  ",
+		    " #  ",
 	    };
 	    case SquareType.O -> pattern = new String[]{
 		    "##",
 		    "##",
 	    };
 	    case SquareType.T -> pattern = new String[]{
+		    "   ",
 		    "###",
 		    " # ",
 	    };
 	    case SquareType.S -> pattern = new String[]{
+		    "   ",
 		    " ##",
 		    "## ",
 	    };
 	    case SquareType.Z -> pattern = new String[]{
+		    "   ",
 		    "## ",
 		    " ##",
 	    };
 	    case SquareType.J -> pattern = new String[]{
-		    " #",
-		    " #",
-		    "##",
+		    " # ",
+		    " # ",
+		    "## ",
 	    };
 	    case SquareType.L -> pattern = new String[]{
-		    "# ",
-		    "# ",
-		    "##",
+		    " # ",
+		    " # ",
+		    " ##",
 	    };
 	}
 	// Return new Poly from pattern
