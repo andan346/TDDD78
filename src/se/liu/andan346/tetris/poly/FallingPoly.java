@@ -26,9 +26,18 @@ public class FallingPoly extends Poly
     }
 
     public void translate(int dx, int dy) {
-	Point pos = getPos();
-	pos.translate(dx, dy);
-	this.pos = pos;
+	saveState();
+	this.pos.translate(dx, dy);
+    }
+
+    public void translate(int dx, int dy, boolean saveState) {
+	if (saveState)
+	    translate(dx, dy);
+	else {
+	    Point pos = getPos();
+	    pos.translate(dx, dy);
+	    this.pos = pos;
+	}
     }
 
     public Point squareToBoard(Point squarePos) {
@@ -75,7 +84,7 @@ public class FallingPoly extends Poly
 	return list;
     }
 
-    private void adjustForEmptySquares() {
+    public void adjustForEmptySquares() {
 	for (Point p : getSquares()) {
 	    if (getSquareAt(p.x, p.y).isSolid()) {
 		System.out.println(p.y);
