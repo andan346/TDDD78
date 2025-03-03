@@ -15,17 +15,5 @@ public class DefaultFallHandler implements FallHandler
 	return falling.getSolidSquares().stream()
 		.filter(p -> !prevFallingSquares.contains(p) && p.y >= 0)
 		.anyMatch(p -> board.getSquareAt(p) != SquareType.EMPTY);
-
-	/*
-	for (Point p : falling.getSolidSquares()) {
-	    if (prevFallingSquares.contains(p) || p.y < 0)
-		continue;
-	    else if (board.getSquareAt(p) != SquareType.EMPTY) {
-		return true;
-	    }
-	}
-	return false;
-
-	 */
     }
 }

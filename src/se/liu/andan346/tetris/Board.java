@@ -25,7 +25,7 @@ public class Board
 
     // Helper components
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
-    private FallHandler fallHandler = new DefaultFallHandler();
+    private FallHandler fallHandler = new FallthroughFallHandler();
     private List<BoardListener> listeners = new ArrayList<>();
     private final static Random RND = new Random();
 

@@ -14,6 +14,7 @@ public class RotateAction extends AbstractAction
     }
 
     @Override public void actionPerformed(final ActionEvent e) {
-	board.rotateFalling();
+	if (board.getFalling() != null)
+		board.rotateFalling();
     }
 }
