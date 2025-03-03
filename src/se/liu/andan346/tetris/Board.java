@@ -1,5 +1,7 @@
 package se.liu.andan346.tetris;
 
+import se.liu.andan346.tetris.collision.FallHandler;
+import se.liu.andan346.tetris.collision.FallthroughFallHandler;
 import se.liu.andan346.tetris.poly.FallingPoly;
 import se.liu.andan346.tetris.poly.Poly;
 import se.liu.andan346.tetris.poly.TetrominoMaker;
@@ -138,7 +140,7 @@ public class Board
 	    spawnRandomFalling();
 
 	// Else, move falling downwards
-	} else moveFalling(Direction.DOWN);
+	} else return; //moveFalling(Direction.DOWN);
     }
 
 
@@ -202,7 +204,10 @@ public class Board
 	FallingPoly currState = falling;
 	FallingPoly prevState = falling.getPrevState();
 
-	prevState.iterSolidSquares(p -> this.setSquareAt(prevState.squareToBoard(p), SquareType.EMPTY));
+	if (currState.getPos().y >= 0)
+	    currState.updateBackdrop(this);
+
+	prevState.iterSolidSquares(p -> this.setSquareAt(prevState.squareToBoard(p), currState.getBackdropSquare(prevState.squareToBoard(p))));
 
 	currState.iterSolidSquares(p -> this.setSquareAt(currState.squareToBoard(p), currState.getType()));
 

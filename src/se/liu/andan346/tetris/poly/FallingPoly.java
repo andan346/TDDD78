@@ -1,14 +1,20 @@
 package se.liu.andan346.tetris.poly;
 
+import se.liu.andan346.tetris.Board;
+import se.liu.andan346.tetris.util.SquareType;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class FallingPoly extends Poly
 {
     private Point pos;
     private FallingPoly prevState = null;
+    private Map<Point, SquareType> backdrop = new HashMap<>();
 
     public FallingPoly(final Poly poly, final Point pos) {
 	super(poly.getShape(), poly.getType());
@@ -91,6 +97,19 @@ public class FallingPoly extends Poly
 		return;
 	    }
 	}
+    }
+
+    public void updateBackdrop(Board board) {
+	List<Point> prevSquares = getPrevState().getSolidSquares();
+	List<Point> currSquares = getSolidSquares();
+
+	currSquares.stream()
+	    .filter(p -> !prevSquares.contains(p))
+	    .forEach(p -> backdrop.putIfAbsent(p, board.getSquareAt(p)));
+    }
+
+    public SquareType getBackdropSquare(final Point p) {
+	return backdrop.getOrDefault(p, SquareType.EMPTY);
     }
 
     /*public int getSolidHeight() {

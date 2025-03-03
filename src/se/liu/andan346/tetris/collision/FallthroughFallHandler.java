@@ -1,5 +1,6 @@
-package se.liu.andan346.tetris;
+package se.liu.andan346.tetris.collision;
 
+import se.liu.andan346.tetris.Board;
 import se.liu.andan346.tetris.poly.FallingPoly;
 import se.liu.andan346.tetris.util.SquareType;
 
