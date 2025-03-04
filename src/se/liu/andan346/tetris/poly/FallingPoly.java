@@ -112,6 +112,25 @@ public class FallingPoly extends Poly
 	return backdrop.getOrDefault(p, SquareType.EMPTY);
     }
 
+    public List<Point> getBoardSquaresBelow() {
+	List<Point> currSquares = getSolidSquares();
+	List<Point> newSquares = currSquares.stream()
+		.map(p -> new Point(p.x, p.y + 1))
+		.filter(p -> !currSquares.contains(p))
+		.toList();
+	return newSquares;
+	/*
+	int maxY = newSquares.stream()
+		.mapToInt(p -> p.y)
+		.max()
+		.orElse(0);
+
+	return newSquares.stream()
+		.filter(p -> p.y == maxY)
+		.toList();
+	 */
+    }
+
     /*public int getSolidHeight() {
 	int[] minMax = new int[]{0, 0};
 	iterSolidSquares(p -> {
