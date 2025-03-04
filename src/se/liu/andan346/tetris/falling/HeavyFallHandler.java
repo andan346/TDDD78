@@ -42,7 +42,6 @@ public class HeavyFallHandler implements FallHandler
 
 	    // revert to prev state if moving horizontally
 	    if (dx != 0) {
-		System.out.println("0");
 		defaultHandler.handleCollision(dy);
 		return;
 	    }
@@ -55,7 +54,6 @@ public class HeavyFallHandler implements FallHandler
 	    // If any goes to the bottom, its supported
 	    for (Point p0 : contactPoints) {
 		if (board.isSupported(p0)) {
-		    System.out.println("1");
 		    defaultHandler.handleCollision(dy);
 		    return;
 		}
@@ -80,5 +78,9 @@ public class HeavyFallHandler implements FallHandler
 
     @Override public FallHandler getDefault() {
 	return defaultHandler;
+    }
+
+    @Override public String toString() {
+	return "Heavy";
     }
 }

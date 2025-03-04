@@ -25,6 +25,7 @@ public class InputHandler
 	bindKey(KeyEvent.VK_DOWN, "move_down", new MoveAction(board, Direction.DOWN));
 	bindKey(KeyEvent.VK_UP, "rotate", new RotateAction(board));
 	bindKey(KeyEvent.VK_ESCAPE, "pause", new PauseAction(board, component));
+	bindKey(KeyEvent.VK_SPACE, "change_powerup", new PowerupAction(board));
     }
 
     private void bindKey(int keyCode, String actionName, AbstractAction action) {

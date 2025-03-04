@@ -29,4 +29,8 @@ public class FallthroughFallHandler implements FallHandler
     @Override public FallHandler getDefault() {
 	return defaultHandler;
     }
+
+    @Override public String toString() {
+	return "Fallthrough";
+    }
 }

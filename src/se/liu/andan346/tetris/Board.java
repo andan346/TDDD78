@@ -1,7 +1,7 @@
 package se.liu.andan346.tetris;
 
+import se.liu.andan346.tetris.falling.DefaultFallHandler;
 import se.liu.andan346.tetris.falling.FallHandler;
-import se.liu.andan346.tetris.falling.HeavyFallHandler;
 import se.liu.andan346.tetris.poly.FallingPoly;
 import se.liu.andan346.tetris.poly.Poly;
 import se.liu.andan346.tetris.poly.TetrominoMaker;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,7 +29,7 @@ public class Board
 
     // Helper components
     private TetrominoMaker tetrominoFactory = new TetrominoMaker();
-    private FallHandler fallHandler = new HeavyFallHandler(this);
+    private FallHandler fallHandler = new DefaultFallHandler(this);
     private List<BoardListener> listeners = new ArrayList<>();
     private final static Random RND = new Random();
 
@@ -365,10 +366,17 @@ public class Board
 	notifyListeners();
     }
 
-
     public void reset() {
 	freezeFalling();
 	for (SquareType[] row : squares) Arrays.fill(row, SquareType.EMPTY);
+    }
+
+    public void setPowerup(final FallHandler fallHandler) {
+	if (Objects.equals(fallHandler.toString(), this.fallHandler.toString()))
+	    return;
+
+	this.fallHandler = fallHandler;
+	notifyListeners();
     }
 
 

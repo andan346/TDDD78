@@ -8,6 +8,7 @@ import se.liu.andan346.tetris.util.SquareType;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.Objects;
 
 public class TetrisComponent extends JComponent implements BoardListener
 {
@@ -15,8 +16,15 @@ public class TetrisComponent extends JComponent implements BoardListener
     public final static int SQUARE_SIZE = 30;
     public InputHandler inputHandler;
 
+    private String prevFallHandler;
+    private double stringOpacity = 1;
+    private int fontSize = 24;
+    private boolean shouldDrawString = false;
+
     public TetrisComponent(Board board) {
 	this.board = board;
+	this.prevFallHandler = board.getFallHandler().toString();
+
 	this.inputHandler = new InputHandler(this);
     }
 
@@ -72,6 +80,21 @@ public class TetrisComponent extends JComponent implements BoardListener
 	Dimension borderDim = getPreferredSize();
 	g2d.setColor(Color.BLACK);
 	g2d.drawRect(borderPos.x - 1, borderPos.y - 1, borderDim.width + 1, borderDim.height + 1);
+
+	// Draw powerup string
+	if (shouldDrawString) {
+	    Composite ogComposite = g2d.getComposite();
+
+	    g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) stringOpacity));
+
+	    g2d.setFont(new Font("Arial", Font.BOLD, fontSize));
+	    FontMetrics fm = g2d.getFontMetrics();
+	    Point pos = new Point((getWidth() - fm.stringWidth(prevFallHandler)) / 2,
+				  (getHeight() - fm.getHeight()) / 2 + fm.getAscent());
+	    g2d.drawString(prevFallHandler, pos.x, pos.y);
+
+	    g2d.setComposite(ogComposite);
+	}
     }
 
     private void drawSquare(int x, int y, Graphics2D g2d) {
@@ -119,8 +142,43 @@ public class TetrisComponent extends JComponent implements BoardListener
 	}
     }
 
+    private void announcePowerup() {
+	new Thread(() -> {
+	    stringOpacity = 1;
+	    fontSize = 1;
+	    shouldDrawString = true;
+
+	    long startTime = System.currentTimeMillis();
+	    long duration = 1000;
+	    while (true) {
+		long elapsed = System.currentTimeMillis() - startTime;
+		if (elapsed > duration) break;
+
+		double val = (double) elapsed / duration;
+		stringOpacity = 1 - val;
+		fontSize = (int) (val * 100);
+
+		repaint();
+
+		try { Thread.sleep(1000 / 30); } // 30 fps
+		catch (InterruptedException e) { e.printStackTrace();}
+	    }
+
+	    shouldDrawString = false;
+	    stringOpacity = 0;
+	}).start();
+    }
+
     @Override public void boardChanged(Board board) {
 	repaint();
+
+	String currFallHandler = board.getFallHandler().toString();
+	if (!Objects.equals(currFallHandler, prevFallHandler)) {
+	    System.out.println("New powerup: " + currFallHandler);
+	    prevFallHandler = currFallHandler;
+	    if (!Objects.equals(currFallHandler, "Default"))
+	    	announcePowerup();
+	}
     }
 
     @Override public void onGameOver(final Board board) {

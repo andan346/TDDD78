@@ -33,6 +33,7 @@ public class DefaultFallHandler implements FallHandler
 	// freeze falling poly in place.
 	if (dy > 0) {
 	    board.freezeFalling();
+	    board.setPowerup(this);
 	    board.tick(); // advance one tick to make gameplay smoother
 	}
     }
@@ -46,7 +47,7 @@ public class DefaultFallHandler implements FallHandler
 	falling.setPos(newPos);
 
 	// In case of collision...
-	if (this.hasCollision()) {
+	if (board.getFallHandler().hasCollision()) {
 	    handleCollision(dy);
 	}
 
@@ -56,5 +57,9 @@ public class DefaultFallHandler implements FallHandler
 
     @Override public FallHandler getDefault() {
 	return this;
+    }
+
+    @Override public String toString() {
+	return "Default";
     }
 }
