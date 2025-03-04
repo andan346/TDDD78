@@ -1,6 +1,7 @@
 package se.liu.andan346.tetris;
 
 import se.liu.andan346.tetris.deprecated.BoardToTextConverter;
+import se.liu.andan346.tetris.gui.ButtonListener;
 import se.liu.andan346.tetris.gui.TetrisViewer;
 import se.liu.andan346.tetris.util.BoardListener;
 import se.liu.andan346.tetris.util.score.HighscoreList;
@@ -8,14 +9,17 @@ import se.liu.andan346.tetris.util.score.HighscoreList;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class GameLoop implements BoardListener
+public class GameLoop implements BoardListener, ButtonListener
 {
+    public static GameLoop instance = null;
+
     private Board board;
     private TetrisViewer viewer;
     private BoardToTextConverter textConverter = new BoardToTextConverter();
     private HighscoreList highScoreList;
 
     private Timer timer = null;
+    private int initStepDelay;
     private int stepDelay;
     private int minStepDelay;
     private int timeBetweenSpeedIncrease;
@@ -23,18 +27,23 @@ public class GameLoop implements BoardListener
     private long lastDelayDecreaseTime;
 
     public GameLoop(Board board, int initStepDelay, int minStepDelay, int timeBetweenSpeedIncrease, int speedIncreaseAmount) {
+	if (instance == null)
+	    instance = this;
+
 	this.board = board;
 	this.viewer = new TetrisViewer(board);
 	this.highScoreList = new HighscoreList();
 
-	this.stepDelay = initStepDelay;
+	this.initStepDelay = initStepDelay;
 	this.minStepDelay = minStepDelay;
 	this.timeBetweenSpeedIncrease = timeBetweenSpeedIncrease;
 	this.speedIncreaseAmount = speedIncreaseAmount;
     }
 
     public void init() {
+	stepDelay = initStepDelay;
 	lastDelayDecreaseTime = System.currentTimeMillis();
+
 	timer = new Timer(stepDelay, this::performStep);
 	timer.setCoalesce(true);
 	timer.start();
@@ -69,5 +78,11 @@ public class GameLoop implements BoardListener
 
     @Override public void onGameOver(final Board board) {
 	timer.stop();
+    }
+
+    @Override public void onRestart() {
+	timer.stop();
+	board.reset();
+	init();
     }
 }

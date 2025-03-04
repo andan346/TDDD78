@@ -26,7 +26,7 @@ public class FallthroughFallHandler implements FallHandler
 	defaultHandler.moveFalling(dx, dy);
     }
 
-    @Override public void rotateFalling() {
-
+    @Override public FallHandler getDefault() {
+	return defaultHandler;
     }
 }

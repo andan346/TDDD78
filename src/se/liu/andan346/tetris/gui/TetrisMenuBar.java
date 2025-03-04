@@ -8,12 +8,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TetrisMenuBar extends JMenuBar implements BoardListener
 {
     private JLabel scoreLabel = null;
+    private Board board;
 
-    public TetrisMenuBar() {
+    private List<ButtonListener> listeners = new ArrayList<>();
+
+    public TetrisMenuBar(Board board) {
+        this.board = board;
         build();
     }
 
@@ -26,10 +32,15 @@ public class TetrisMenuBar extends JMenuBar implements BoardListener
         exit.addActionListener(this::onExit);
         add(exit);
 
+        final JButton restart = new DefaultButton("Börja om");
+        restart.addActionListener(this::onRestart);
+        add(restart);
+
         add(Box.createHorizontalGlue());
 
         scoreLabel = new JLabel("Poäng: " + 0);
-        scoreLabel.setPreferredSize(DefaultButton.preferredSize);
+        FontMetrics metrics = scoreLabel.getFontMetrics(scoreLabel.getFont());
+        scoreLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, metrics.stringWidth("00")));
         add(scoreLabel);
     }
 
@@ -40,7 +51,7 @@ public class TetrisMenuBar extends JMenuBar implements BoardListener
 
         private DefaultButton(String text) {
             super(text);
-            setPreferredSize(preferredSize);
+            //setPreferredSize(preferredSize);
             setFocusable(false);
             setBackground(background);
             setOpaque(true);
@@ -68,14 +79,45 @@ public class TetrisMenuBar extends JMenuBar implements BoardListener
     }
 
     private void onExit(final ActionEvent e) {
+        if (!board.isGamePaused)
+            board.togglePause();
+
         int choice = JOptionPane.showConfirmDialog(
                 null,
                 "Är du säker på att du vill avsluta?",
                 "Konfirmation",
                 JOptionPane.YES_NO_OPTION);
 
+        if (board.isGamePaused)
+            board.togglePause();
+
         if (choice == JOptionPane.YES_OPTION)
             System.exit(0);
+    }
+
+    private void onRestart(final ActionEvent e) {
+        if (!board.isGamePaused)
+            board.togglePause();
+
+        int choice = JOptionPane.showConfirmDialog(
+                null,
+                "Är du säker på att du vill börja om?",
+                "Konfirmation",
+                JOptionPane.YES_NO_OPTION);
+
+        if (board.isGamePaused)
+            board.togglePause();
+
+        if (choice != JOptionPane.YES_OPTION)
+            return;
+
+        for (ButtonListener listener : listeners) {
+            listener.onRestart();
+        }
+    }
+
+    public void addButtonListener(ButtonListener bl) {
+        this.listeners.add(bl);
     }
 
     @Override public void boardChanged(Board board) {

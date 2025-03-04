@@ -54,7 +54,7 @@ public class DefaultFallHandler implements FallHandler
 	else board.updateFallingSquares();
     }
 
-    @Override public void rotateFalling() {
-
+    @Override public FallHandler getDefault() {
+	return this;
     }
 }

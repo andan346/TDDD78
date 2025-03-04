@@ -6,5 +6,5 @@ public interface FallHandler
 
     public void moveFalling(int dx, int dy);
 
-    public void rotateFalling();
+    public FallHandler getDefault();
 }

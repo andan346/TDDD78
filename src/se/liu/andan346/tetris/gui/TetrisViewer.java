@@ -1,6 +1,7 @@
 package se.liu.andan346.tetris.gui;
 
 import se.liu.andan346.tetris.Board;
+import se.liu.andan346.tetris.GameLoop;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,8 @@ public class TetrisViewer
 
 	frame.setLayout(new BorderLayout());
 
-	TetrisMenuBar menuBar = new TetrisMenuBar();
+	TetrisMenuBar menuBar = new TetrisMenuBar(board);
+	menuBar.addButtonListener(GameLoop.instance);
 	board.addBoardListener(menuBar);
 	frame.setJMenuBar(menuBar);
 

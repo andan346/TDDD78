@@ -42,8 +42,9 @@ public class Board
 	this.width = width;
 	this.height = height;
 	this.squares = new SquareType[height][width];
+	reset();
 	// Fill board with empty squares
-	for (SquareType[] row : squares) Arrays.fill(row, SquareType.EMPTY);
+	//for (SquareType[] row : squares) Arrays.fill(row, SquareType.EMPTY);
     }
 
 
@@ -270,7 +271,7 @@ public class Board
 	    Point posDown = new Point(falling.getPos().x, falling.getPos().y + 1);
 	    falling.setPos(posDown);
 	    // Check collision
-	    if (getFallHandler().hasCollision()) {
+	    if (getFallHandler().getDefault().hasCollision()) {
 		if (!isGameOver) gameOver(); // Call game over if collision on spawn
 	    }
 	    else
@@ -362,6 +363,12 @@ public class Board
     public void togglePause() {
 	isGamePaused = !isGamePaused;
 	notifyListeners();
+    }
+
+
+    public void reset() {
+	freezeFalling();
+	for (SquareType[] row : squares) Arrays.fill(row, SquareType.EMPTY);
     }
 
 
